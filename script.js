@@ -207,23 +207,39 @@ const lightboxCaption = document.getElementById('lightbox-caption');
 function openLightbox(card) {
     const type = card.getAttribute('data-type');
     const src = card.getAttribute('data-src');
+    const youtubeId = card.getAttribute('data-youtube-id');
     
     // 1. RÉCUPÉRATION DES NOUVELLES INFOS
     const title = card.querySelector('h3').innerText;
-    const softs = card.getAttribute('data-softs') || "Logiciel inconnu"; // Valeur par défaut si vide
+    const softs = card.getAttribute('data-softs') || "Logiciel inconnu";
     const date = card.getAttribute('data-date') || "Date inconnue";
 
     lightboxContent.innerHTML = '';
     
     // 2. CRÉATION DU CONTENEUR MÉDIA
-    // On met le média dans une div pour pouvoir centrer le texte en dessous
     const wrapper = document.createElement('div');
     wrapper.style.display = 'flex';
     wrapper.style.flexDirection = 'column';
     wrapper.style.alignItems = 'center';
     wrapper.style.gap = '15px';
     
-    if (type === 'video') {
+    // GESTION YOUTUBE
+    if (type === 'youtube' && youtubeId) {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+        iframe.width = '1280';
+        iframe.height = '720';
+        iframe.style.maxWidth = '90vw';
+        iframe.style.maxHeight = '80vh';
+        iframe.style.borderRadius = '4px';
+        iframe.style.boxShadow = '0 0 50px rgba(0,0,0,0.5)';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', '');
+        wrapper.appendChild(iframe);
+    }
+    // GESTION VIDÉO LOCALE
+    else if (type === 'video') {
         const video = document.createElement('video'); 
         video.src = src; 
         video.controls = true; 
