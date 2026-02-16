@@ -16,6 +16,19 @@
 </head>
 <body>
 
+    <!-- LOADER SPATIAL -->
+    <div id="loader-container">
+        <canvas id="loader-stars"></canvas>
+        <div class="loader-content">
+            <div class="loader-logo">PORTFOLIO.</div>
+            <div class="loader-bar-container">
+                <div class="loader-bar" id="loader-bar"></div>
+            </div>
+            <div class="loader-percentage" id="loader-percentage">0%</div>
+            <div class="loader-message" id="loader-message">Initialisation...</div>
+        </div>
+    </div>
+
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;">
         <defs>
             <filter id="liquid-distortion" x="-50%" y="-50%" width="200%" height="200%">
@@ -28,12 +41,16 @@
 
     <nav>
         <div class="logo" onclick="scrollToSection('#home')">PORTFOLIO.</div>
-        <div class="nav-links">
-            <a onclick="scrollToSection('#home')">Accueil</a>
-            <a onclick="scrollToSection('#projects')">Work</a>
-            <a onclick="scrollToSection('#about')">About</a>
-            <a onclick="scrollToSection('#contact')">Contact</a>
+        <!-- Switch toggle mode performance -->
+        <div class="performance-switch" onclick="togglePerformanceMode()">
+            <div class="switch-container">
+                <div class="switch-track">
+                    <div class="switch-thumb"></div>
+                </div>
+                <span class="switch-description"></span>
+            </div>
         </div>
+        <!-- Navigation déplacée vers les boutons flottants -->
     </nav>
 
     <div id="music-player-container">
@@ -62,9 +79,25 @@
 
     <div id="webgl-container"></div>
 
-    <div id="floating-contact" onclick="scrollToSection('#contact')">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    <!-- Navigation flottante -->
+    <div id="floating-nav" class="floating-nav-container">
+        <div class="floating-nav-btn" onclick="scrollToSection('#home')" data-tooltip="Accueil">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </div>
+        <div class="floating-nav-btn" onclick="scrollToSection('#projects')" data-tooltip="Work">
+            <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM10 4h4v2h-4V4z"/></svg>
+        </div>
+        <div class="floating-nav-btn" onclick="scrollToSection('#about')" data-tooltip="About">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <div class="floating-nav-btn" onclick="scrollToSection('#skills')" data-tooltip="Skills">
+            <svg viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+        </div>
+        <div class="floating-nav-btn" onclick="scrollToSection('#contact')" data-tooltip="Contact">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
     </div>
+
 
     <div id="lightbox" onclick="closeLightbox()">
         <div id="close-btn">&times;</div>
@@ -94,56 +127,347 @@
                 </div>
             </div>
             <div class="bento-grid">
-                 <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600"
-                    data-softs="Blender, Photoshop" 
-                    data-date="Octobre 2023" 
-                    onclick="openLightbox(this)">
-    
-                    <div class="media-icon">IMG</div>
-    
-                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600" class="card-media" alt="Aperçu projet">
-    
-                    <div class="card-overlay">
-                        <h3>Abstract Oil</h3>
-                        <p>Cycles / Texture</p>
-                    </div>
-                </div>
                 <div class="project-card" 
                     data-category="anim" 
                     data-type="video" 
-                    data-src="https://cdn.pixabay.com/video/2023/10/22/186115-877653483_large.mp4"
-                    data-softs="Blender, After Effects" 
-                    data-date="Novembre 2023" 
+                    data-src="/projets/anims/rendu7.mp4"
+                    data-softs="Blender" 
+                    data-date="Février 2026" 
                     onclick="openLightbox(this)">
     
                     <div class="media-icon">PLAY</div>
                     
                     <video class="card-media" autoplay muted loop playsinline>
-                        <source src="https://cdn.pixabay.com/video/2023/10/22/186115-877653483_large.mp4" type="video/mp4">
+                        <source src="/projets/anims/rendu7.mp4" type="video/mp4">
                     </video>
                     
                     <div class="card-overlay">
-                        <h3>Cyber Tunnel</h3>
-                        <p>Animation Loop</p>
+                        <h3>Goku's "I Am" Speech</h3>
+                        <p>Animation</p>
                     </div>
                 </div>
-                <div class="project-card" data-category="render" data-type="image" data-src="https://images.unsplash.com/photo-1633596683562-4a4697de837a?q=80&w=1920" onclick="openLightbox(this)">
-                    <div class="media-icon">IMG</div>
-                    <img src="https://images.unsplash.com/photo-1633596683562-4a4697de837a?q=80&w=600" class="card-media">
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/marioanim2.mp4"
+                    data-softs="Blender" 
+                    data-date="Janvier 2026" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/marioanim2.mp4" type="video/mp4">
+                    </video>
+                    
                     <div class="card-overlay">
-                        <h3>Glass Shader</h3>
-                        <p>Octane Render</p>
+                        <h3>Mario Landing Pose</h3>
+                        <p>Animation</p>
                     </div>
                 </div>
-                <div class="project-card" data-category="render" data-type="image" data-src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920" onclick="openLightbox(this)">
-                    <div class="media-icon">IMG</div>
-                    <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=600" class="card-media">
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/HUNTED.mp4"
+                    data-softs="Blender" 
+                    data-date="Juin 2025" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/HUNTED.mp4" type="video/mp4">
+                    </video>
+                    
                     <div class="card-overlay">
-                        <h3>Neon City</h3>
-                        <p>Unreal Engine 5</p>
+                        <h3>Hunted</h3>
+                        <p>School Project Animation</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/gokuanimtest1.mp4"
+                    data-softs="Blender" 
+                    data-date="Avril 2025" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/gokuanimtest1.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>Goku Facial Expression</h3>
+                        <p>Animation</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/BenAmar_Naim_Marche.mp4"
+                    data-softs="Maya" 
+                    data-date="Mars 2025" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/BenAmar_Naim_Marche.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>Walk Cycle</h3>
+                        <p>Animation</p>
+                    </div>
+                </div>
+
+                 <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/ssj1.png"
+                    data-softs="Blender" 
+                    data-date="Janvier 2025" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/ssj1.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Goku Super Saiyan</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/base.png"
+                    data-softs="Blender" 
+                    data-date="Janvier 2025" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/base.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Son Goku</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/widekame.png"
+                    data-softs="Blender" 
+                    data-date="Novembre 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/widekame.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Goku KAMEHAMEHA</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/widegoku.png"
+                    data-softs="Blender" 
+                    data-date="Novembre 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/widegoku.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Goku Dragon Ball SUPER</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/finalHD.mp4"
+                    data-softs="Blender" 
+                    data-date="Mai 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/finalHD.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>"You're gonna PAY for that !"</h3>
+                        <p>Animation</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/grosdef.png"
+                    data-softs="Blender" 
+                    data-date="Avril 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/grosdef.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Gros défouloir</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/rendumine.mp4"
+                    data-softs="Blender" 
+                    data-date="Avril 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/rendumine.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>Skyblock</h3>
+                        <p>Animation</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/rendu.mp4"
+                    data-softs="Blender" 
+                    data-date="Avril 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/rendu.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>Le Voyage des Âmes</h3>
+                        <p>Animation</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/sm64ds.mp4"
+                    data-softs="Blender" 
+                    data-date="Avril 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/sm64ds.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>Super Mario 64 DS Movie</h3>
+                        <p>Animation</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/wii.png"
+                    data-softs="Blender" 
+                    data-date="Mars 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/wii.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Movie Mario Bros. WII</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/2low.png"
+                    data-softs="Blender" 
+                    data-date="Mars 2024" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/2low.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Movie Mario Dance Dance Revolution</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="render" 
+                    data-type="image" 
+                    data-src="/projets/renders/mario64render.png"
+                    data-softs="Blender" 
+                    data-date="Janvier 2023" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">IMG</div>
+    
+                    <img src="/projets/renders/mario64render.png" class="card-media" alt="Aperçu projet">
+    
+                    <div class="card-overlay">
+                        <h3>Super Mario Render 96</h3>
+                        <p>Render</p>
+                    </div>
+                </div>
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="video" 
+                    data-src="/projets/anims/ChildLinkmaster2.mp4"
+                    data-softs="Source Filmmaker" 
+                    data-date="Juin 2020" 
+                    onclick="openLightbox(this)">
+    
+                    <div class="media-icon">PLAY</div>
+                    
+                    <video class="card-media" autoplay muted loop playsinline>
+                        <source src="/projets/anims/ChildLinkmaster2.mp4" type="video/mp4">
+                    </video>
+                    
+                    <div class="card-overlay">
+                        <h3>Link Enfant devant l'Épée de Légende</h3>
+                        <p>Animation</p>
                     </div>
                 </div>
             </div>
@@ -165,6 +489,84 @@
                 <div class="soft-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Autodesk_Maya_Logo_2023.svg/1024px-Autodesk_Maya_Logo_2023.svg.png" class="soft-icon"><span class="soft-name">Maya</span></div>
                  <div class="soft-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Adobe_Substance_3D_Painter_logo.svg/1200px-Adobe_Substance_3D_Painter_logo.svg.png" class="soft-icon"><span class="soft-name">Substance</span></div>
             </div>
+            
+            <!-- Bouton CV téléchargeable -->
+            <a href="cv.pdf" download="CV_Portfolio.pdf" class="cta-btn cv-download-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Télécharger mon CV</span>
+            </a>
+            
+            <a onclick="scrollToSection('#skills')" class="cta-btn about-btn">
+                <span>Mes compétences</span>
+                <div class="arrow">↓</div>
+            </a>
+        </section>
+
+        <section id="skills">
+            <h2>Compétences</h2>
+            <div class="skills-container">
+                
+                <!-- Animation 3D -->
+                <div class="skill-category">
+                    <div class="skill-header">
+                        <div class="skill-icon-wrapper">
+                            <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="skill-info">
+                            <div class="skill-title-row">
+                                <h3>Animation 3D</h3>
+                                <span class="skill-badge expert">Expert</span>
+                            </div>
+                            <p class="skill-description">Création d'animations fluides et expressives avec attention au timing et à la physique</p>
+                        </div>
+                    </div>
+                    <div class="skill-highlights">
+                        <div class="highlight-item">✦ Character Animation & Rigging</div>
+                        <div class="highlight-item">✦ Keyframe Animation avancée</div>
+                        <div class="highlight-item">✦ Motion Design & Cinématiques</div>
+                    </div>
+                </div>
+
+                <!-- Lighting/Rendering -->
+                <div class="skill-category">
+                    <div class="skill-header">
+                        <div class="skill-icon-wrapper">
+                            <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </div>
+                        <div class="skill-info">
+                            <div class="skill-title-row">
+                                <h3>Lighting & Rendering</h3>
+                                <span class="skill-badge expert">Expert</span>
+                            </div>
+                            <p class="skill-description">Maîtrise complète de l'éclairage et du rendu photoréaliste</p>
+                        </div>
+                    </div>
+                    <div class="skill-highlights">
+                        <div class="highlight-item">✦ HDRI & Three-Point Lighting</div>
+                        <div class="highlight-item">✦ Cycles & Eevee (Blender)</div>
+                        <div class="highlight-item">✦ Composition & Post-Production</div>
+                    </div>
+                </div>
+
+            </div>
             <a onclick="scrollToSection('#contact')" class="cta-btn about-btn">
                 <span>Me contacter</span>
                 <div class="arrow">↓</div>
@@ -178,7 +580,7 @@
                 <div class="liquid-content">
                     <h2>Let's Create</h2>
                     <p>Un projet en tête ? Une collaboration ?</p>
-                    <a href="mailto:contact@portfolio.com" class="email-link">hello@portfolio.com</a>
+                    <a href="/cdn-cgi/l/email-protection#34575b5a4055574074445b4640525b585d5b1a575b59" class="email-link"><span class="__cf_email__" data-cfemail="c4aca1a8a8ab84b4abb6b0a2aba8adabeaa7aba9">[email&#160;protected]</span></a>
                     <div class="social-links">
                         <a href="#" class="social-link">Instagram</a>
                         <a href="#" class="social-link">Artstation</a>

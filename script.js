@@ -1,10 +1,202 @@
+console.log("✅ Script.js chargé !");
+
+// =========================================================
+// --- SYSTÈME DE MODES DE PERFORMANCE ---
+// =========================================================
+
+// Récupérer le mode sauvegardé (par défaut: normal)
+let performanceMode = localStorage.getItem('performanceMode') || 'normal';
+document.body.classList.add(`mode-${performanceMode}`);
+
+// Fonction pour toggle entre les modes
+function togglePerformanceMode() {
+    if (performanceMode === 'normal') {
+        performanceMode = 'light';
+    } else {
+        performanceMode = 'normal';
+    }
+    
+    // Sauvegarder la préférence
+    localStorage.setItem('performanceMode', performanceMode);
+    
+    // Recharger la page pour appliquer tous les changements (y compris les étoiles)
+    location.reload();
+}
+
+// Appliquer les optimisations selon le mode
+function applyPerformanceMode() {
+    if (performanceMode === 'light') {
+        // MODE LÉGER : Optimisations
+        console.log('⚡ Mode léger activé');
+        
+        // Désactiver le lazy loading des vidéos
+        window.videoAutoplayEnabled = false;
+        
+        // Réduire les étoiles
+        window.reducedStars = true;
+        
+    } else {
+        // MODE NORMAL : Performances complètes
+        console.log('🚀 Mode normal activé');
+        
+        // Réactiver les vidéos
+        window.videoAutoplayEnabled = true;
+        
+        // Étoiles complètes
+        window.reducedStars = false;
+    }
+}
+
+// Appliquer le mode au chargement
+applyPerformanceMode();
+
+// =========================================================
+// --- LOADER SPATIAL ---
+// =========================================================
+
+const loaderContainer = document.getElementById('loader-container');
+const loaderBar = document.getElementById('loader-bar');
+const loaderPercentage = document.getElementById('loader-percentage');
+const loaderMessage = document.getElementById('loader-message');
+const loaderStarsCanvas = document.getElementById('loader-stars');
+const loaderCtx = loaderStarsCanvas.getContext('2d');
+
+// Configuration du canvas
+loaderStarsCanvas.width = window.innerWidth;
+loaderStarsCanvas.height = window.innerHeight;
+
+// Création des étoiles pour le loader
+const loaderStars = [];
+for (let i = 0; i < 200; i++) {
+    loaderStars.push({
+        x: Math.random() * loaderStarsCanvas.width,
+        y: Math.random() * loaderStarsCanvas.height,
+        radius: Math.random() * 1.5,
+        speed: Math.random() * 0.5 + 0.2,
+        opacity: Math.random()
+    });
+}
+
+// Animation des étoiles du loader
+function animateLoaderStars() {
+    loaderCtx.clearRect(0, 0, loaderStarsCanvas.width, loaderStarsCanvas.height);
+    
+    loaderStars.forEach(star => {
+        loaderCtx.beginPath();
+        loaderCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        loaderCtx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        loaderCtx.fill();
+        
+        // Faire scintiller
+        star.opacity += (Math.random() - 0.5) * 0.05;
+        star.opacity = Math.max(0.1, Math.min(1, star.opacity));
+        
+        // Déplacer vers le bas
+        star.y += star.speed;
+        if (star.y > loaderStarsCanvas.height) {
+            star.y = 0;
+            star.x = Math.random() * loaderStarsCanvas.width;
+        }
+    });
+    
+    if (!loaderContainer.classList.contains('hidden')) {
+        requestAnimationFrame(animateLoaderStars);
+    }
+}
+animateLoaderStars();
+
+// Système de progression du loader
+let loadProgress = 0;
+let assetsLoaded = {
+    scripts: false,
+    models: false,
+    fonts: false
+};
+
+const loadMessages = [
+    "Initialisation...",
+    "Chargement des étoiles...",
+    "Préparation de la galaxie...",
+    "Chargement des modèles 3D...",
+    "Finalisation..."
+];
+
+function updateLoader(progress, force = false) {
+    if (progress > loadProgress || force) {
+        loadProgress = progress;
+        loaderBar.style.width = progress + '%';
+        loaderPercentage.textContent = Math.floor(progress) + '%';
+        
+        // Changer le message selon la progression
+        if (progress < 20) loaderMessage.textContent = loadMessages[0];
+        else if (progress < 40) loaderMessage.textContent = loadMessages[1];
+        else if (progress < 60) loaderMessage.textContent = loadMessages[2];
+        else if (progress < 90) loaderMessage.textContent = loadMessages[3];
+        else loaderMessage.textContent = loadMessages[4];
+    }
+}
+
+function checkAllAssetsLoaded() {
+    if (Object.values(assetsLoaded).every(v => v === true)) {
+        updateLoader(100);
+        setTimeout(() => {
+            loaderContainer.classList.add('hidden');
+        }, 500);
+    }
+}
+
+// Démarrer avec 10% (scripts chargés)
+updateLoader(10);
+
+// Simuler le chargement des fonts
+document.fonts.ready.then(() => {
+    assetsLoaded.fonts = true;
+    updateLoader(30);
+    checkAllAssetsLoaded();
+});
+
+// Les scripts sont chargés
+setTimeout(() => {
+    assetsLoaded.scripts = true;
+    updateLoader(50);
+    checkAllAssetsLoaded();
+}, 500);
+
+// Le modèle 3D sera marqué comme chargé plus tard dans le code
+window.loaderModelLoaded = function() {
+    assetsLoaded.models = true;
+    updateLoader(90);
+    checkAllAssetsLoaded();
+};
+
+// Fallback: si rien ne se passe après 8 secondes, on retire le loader
+setTimeout(() => {
+    if (!loaderContainer.classList.contains('hidden')) {
+        console.log("⚠️ Loader timeout - fermeture forcée");
+        loaderContainer.classList.add('hidden');
+    }
+}, 8000);
+
 // --- 1. LENIS (Smooth Scroll) ---
 const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', smooth: true });
-function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+function raf(time) { 
+    lenis.raf(time); 
+    requestAnimationFrame(raf); 
+}
 requestAnimationFrame(raf);
 
 // --- 2. GSAP SCROLL & NAV ---
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+// 🔥 IMPORTANT : Connecter Lenis à ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
+
+gsap.ticker.add((time)=>{
+  lenis.raf(time * 1000);
+});
+
+gsap.ticker.lagSmoothing(0);
+
 function scrollToSection(id) { gsap.to(window, { duration: 1.5, scrollTo: id, ease: "power3.inOut" }); }
 
 // --- 3. LIGHTBOX ---
@@ -97,10 +289,75 @@ function filterProjects(category, btn) {
     });
 }
 
+// --- LAZY LOADING VIDÉOS (Optimisation performances) ---
+// Les vidéos ne se chargent et ne jouent que quand elles sont visibles
+const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const video = entry.target;
+        
+        if (entry.isIntersecting) {
+            // La vidéo est visible : on la charge
+            if (!video.src && video.dataset.src) {
+                video.src = video.dataset.src;
+                video.load();
+            }
+            
+            // On la joue SEULEMENT en mode normal
+            if (window.videoAutoplayEnabled !== false) {
+                video.play().catch(() => {});
+            }
+        } else {
+            // La vidéo n'est plus visible : pause
+            video.pause();
+        }
+    });
+}, {
+    threshold: 0.2,
+    rootMargin: '200px'
+});
+
+// Appliquer l'observer à toutes les vidéos des cartes projets
+document.addEventListener('DOMContentLoaded', () => {
+    const projectVideos = document.querySelectorAll('.project-card video');
+    
+    projectVideos.forEach(video => {
+        const source = video.querySelector('source');
+        if (source && source.src) {
+            video.dataset.src = source.src;
+            source.removeAttribute('src');
+        }
+        
+        video.removeAttribute('autoplay');
+        video.setAttribute('preload', 'metadata');
+        
+        videoObserver.observe(video);
+    });
+    
+    console.log(`✅ Lazy loading activé pour ${projectVideos.length} vidéos`);
+});
+
 // --- 5. ANIMATIONS DIVERSES ---
 gsap.to(".soft-item", {
     scrollTrigger: { trigger: "#about", start: "top 70%", toggleActions: "play none none reverse" },
     y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power2.out"
+});
+
+// Animation des compétences
+document.addEventListener('DOMContentLoaded', function() {
+    const skillCategories = document.querySelectorAll('.skill-category');
+    
+    skillCategories.forEach((category, index) => {
+        ScrollTrigger.create({
+            trigger: category,
+            start: "top 80%",
+            onEnter: () => {
+                // Rendre visible avec animation
+                setTimeout(() => {
+                    category.classList.add('visible');
+                }, 150 * index);
+            }
+        });
+    });
 });
 
 gsap.to("#turbulence-noise", { attr: { baseFrequency: "0.001" }, duration: 15, repeat: -1, yoyo: true, ease: "sine.inOut" });
@@ -114,21 +371,17 @@ card.addEventListener('mousemove', (e) => {
 });
 card.addEventListener('mouseleave', () => { card.style.transform = `perspective(1000px) scale(1.05) rotateX(0) rotateY(0)`; });
 
-// --- 7. BOUTON FLOTTANT ---
-const floatingBtn = document.getElementById('floating-contact');
+// --- 7. NAVIGATION FLOTTANTE ---
+const floatingNav = document.getElementById('floating-nav');
 window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     const winH = window.innerHeight;
-    const docH = document.body.scrollHeight;
 
-    if (scrollY > winH * 0.5 && scrollY < docH - winH * 1.5) {
-        floatingBtn.style.opacity = '1'; 
-        floatingBtn.style.transform = 'translateY(0) scale(1)'; 
-        floatingBtn.style.pointerEvents = 'all';
+    // Visible partout sauf sur la section Home
+    if (scrollY > winH * 0.8) {
+        floatingNav.classList.add('visible');
     } else {
-        floatingBtn.style.opacity = '0'; 
-        floatingBtn.style.transform = 'translateY(20px) scale(1)'; 
-        floatingBtn.style.pointerEvents = 'none';
+        floatingNav.classList.remove('visible');
     }
 });
 
@@ -141,6 +394,7 @@ scene.fog = new THREE.FogExp2(0x000000, 0.0005);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 50;
+scene.add(camera); // IMPORTANT : Ajouter la caméra à la scène
 
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -149,6 +403,12 @@ document.getElementById('webgl-container').appendChild(renderer.domElement);
 
 const galaxyGroup = new THREE.Group();
 scene.add(galaxyGroup);
+
+// ===== CONFIGURATION DES VITESSES DE ROTATION =====
+// Ajuste ces valeurs pour contrôler la vitesse de rotation de la galaxie
+const GALAXY_ROTATION_SPEED = 0.0002;  // Vitesse de base (réduite de 0.0005 à 0.0002)
+const ROTATION_VARIATION = 0.2;        // Variation aléatoire (±20%)
+// ==================================================
 
 // --- PALETTES DE COULEURS ---
 const palettes = [
@@ -171,50 +431,126 @@ const currentColors = {
     bg: palettes[currentPaletteIndex].bg.clone()
 };
 
-// --- TEXTURE FUMÉE ---
-function createSmokeTexture() {
+// --- TEXTURE NÉBULEUSE (Allongée et organique) ---
+function createNebulaTexture() {
     const canvas = document.createElement('canvas');
-    canvas.width = 128; canvas.height = 128;
+    canvas.width = 512; // Plus grande résolution pour éviter la pixelisation
+    canvas.height = 256; 
     const ctx = canvas.getContext('2d');
-    const grd = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grd.addColorStop(0, 'rgba(255,255,255,0.9)'); 
-    grd.addColorStop(0.3, 'rgba(255,255,255,0.2)');
+    
+    // Créer un gradient allongé avec bords plus doux
+    const grd = ctx.createRadialGradient(256, 128, 0, 256, 128, 220);
+    grd.addColorStop(0, 'rgba(255,255,255,0.6)'); 
+    grd.addColorStop(0.3, 'rgba(255,255,255,0.3)');
+    grd.addColorStop(0.6, 'rgba(255,255,255,0.1)');
     grd.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, 128, 128);
+    ctx.fillRect(0, 0, 512, 256);
+    
+    // Ajouter du bruit subtil pour rendre les bords irréguliers
+    const imageData = ctx.getImageData(0, 0, 512, 256);
+    for(let i = 0; i < imageData.data.length; i += 4) {
+        const noise = Math.random() * 0.15; // Moins de bruit = bords plus doux
+        imageData.data[i + 3] *= (1 - noise);
+    }
+    ctx.putImageData(imageData, 0, 0);
+    
     const texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
     return texture;
 }
-const smokeTexture = createSmokeTexture();
+const nebulaTexture = createNebulaTexture();
 
-// --- COUCHES ---
-function createGalaxyLayer(count, size, color, opacity, blending, spread) {
+// --- SYSTÈME D'ÉTOILES MULTI-COUCHES (Profondeur) ---
+// INVERSÉ : Plus d'étoiles loin, moins d'étoiles proches
+const starLayers = [];
+
+function createStarLayer(count, size, spread, speedMultiplier) {
     const geom = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
-    for(let i=0; i<count*3; i++) pos[i] = (Math.random() - 0.5) * spread;
+    const sizes = new Float32Array(count);
+    
+    for(let i = 0; i < count; i++) {
+        pos[i * 3] = (Math.random() - 0.5) * spread;
+        pos[i * 3 + 1] = (Math.random() - 0.5) * spread;
+        pos[i * 3 + 2] = (Math.random() - 0.5) * spread;
+        
+        // Variation de taille pour chaque étoile
+        sizes[i] = size * (0.5 + Math.random() * 1.5);
+    }
+    
     geom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geom.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    
     const mat = new THREE.PointsMaterial({
-        size: size, color: color, map: smokeTexture, 
-        transparent: true, opacity: opacity, depthWrite: false, blending: blending
+        size: size,
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.8 + Math.random() * 0.2,
+        sizeAttenuation: true
     });
+    
+    const stars = new THREE.Points(geom, mat);
+    galaxyGroup.add(stars);
+    
+    return {
+        mesh: stars,
+        speedMultiplier: speedMultiplier
+    };
+}
+
+// INVERSÉ : Plus d'étoiles lointaines, moins d'étoiles proches
+// Ajustement selon le mode performance
+const starMultiplier = window.reducedStars ? 0.3 : 1; // 70% moins d'étoiles en mode léger
+
+starLayers.push(createStarLayer(Math.floor(18000 * starMultiplier), 0.15, 800, 0.15));  // Lointaines
+starLayers.push(createStarLayer(Math.floor(4000 * starMultiplier), 0.35, 500, 0.35));   // Moyennes
+starLayers.push(createStarLayer(Math.floor(600 * starMultiplier), 0.6, 300, 0.6));      // Proches
+
+// --- NÉBULEUSES ALLONGÉES (Style Mario Galaxy) ---
+// Plus loin et plus grandes pour être bien visibles
+function createNebulaCloud(count, scaleX, scaleY, color, opacity, spread) {
+    const geom = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    
+    for(let i = 0; i < count; i++) {
+        // Distribution allongée pour créer des formes de nuages
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * spread;
+        const elongation = 2 + Math.random(); // Facteur d'élongation
+        
+        pos[i * 3] = Math.cos(angle) * radius * elongation;
+        pos[i * 3 + 1] = (Math.random() - 0.5) * spread * 0.5;
+        pos[i * 3 + 2] = Math.sin(angle) * radius;
+    }
+    
+    geom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    
+    const mat = new THREE.PointsMaterial({
+        size: scaleX,
+        color: color,
+        map: nebulaTexture,
+        transparent: true,
+        opacity: opacity,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+    });
+    
     const points = new THREE.Points(geom, mat);
     galaxyGroup.add(points);
     return points;
 }
 
-const nebulaBase = createGalaxyLayer(50, 700, currentColors.base, 0.4, THREE.NormalBlending, 200);
-const nebulaMid = createGalaxyLayer(60, 500, currentColors.mid, 0.12, THREE.AdditiveBlending, 180);
-const nebulaHigh = createGalaxyLayer(40, 300, currentColors.high, 0.15, THREE.AdditiveBlending, 120);
+// Nébuleuses plus grandes et plus visibles
+const nebulaBase = createNebulaCloud(25, 1200, 600, currentColors.base, 0.25, 250);
+const nebulaMid = createNebulaCloud(30, 900, 450, currentColors.mid, 0.18, 220);
+const nebulaHigh = createNebulaCloud(20, 700, 350, currentColors.high, 0.22, 180);
 
-// Étoiles
-const starGeom = new THREE.BufferGeometry();
-const starPos = new Float32Array(3500 * 3);
-for(let i=0; i<3500*3; i++) starPos[i] = (Math.random() - 0.5) * 500;
-starGeom.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-const starMat = new THREE.PointsMaterial({ size: 0.35, color: 0xffffff, transparent: true, opacity: 0.95 });
-const stars = new THREE.Points(starGeom, starMat);
-galaxyGroup.add(stars);
+// Rotation initiale aléatoire pour chaque nébuleuse
+nebulaBase.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+nebulaMid.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+nebulaHigh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+
 
 
 // ==========================================
@@ -231,8 +567,8 @@ scene.add(dirLight);
 
 // 2. GROUPE CONTENEUR (Pour le scroll)
 const modelGroup = new THREE.Group();
-scene.add(modelGroup);
-modelGroup.position.set(20, 0, 10); 
+scene.add(modelGroup); // Remettre dans la scène, pas dans la caméra
+modelGroup.position.set(20, 0, 10);
 
 // 3. CHARGEMENT DU MODÈLE (ALÉATOIRE)
 const loader = new THREE.GLTFLoader();
@@ -293,11 +629,17 @@ loader.load(selectedModel.file,
         });
 
         modelGroup.add(model);
-        window.mainMesh = model; 
+        window.mainMesh = model;
+        
+        // Notifier le loader que le modèle est chargé
+        console.log("✅ Modèle 3D chargé !");
+        if (window.loaderModelLoaded) window.loaderModelLoaded();
     },
     undefined,
     function (error) {
         console.error('❌ Erreur sur le modèle ' + selectedModel.file + ' :', error);
+        // Même en cas d'erreur, on débloquer le loader
+        if (window.loaderModelLoaded) window.loaderModelLoaded();
     }
 );
 
@@ -309,7 +651,9 @@ loader.load(selectedModel.file,
 function animate() {
     requestAnimationFrame(animate);
     
-    // 1. GESTION DES COULEURS
+    const time = Date.now() * 0.0001; // Timer pour les mouvements fluides
+    
+    // 1. GESTION DES COULEURS (ON GARDE TON SYSTÈME)
     transitionProgress += transitionSpeed;
     if(transitionProgress >= 1) {
         transitionProgress = 0;
@@ -333,12 +677,34 @@ function animate() {
     scene.fog.color.copy(currentColors.bg);
     document.body.style.backgroundColor = `#${currentColors.bg.getHexString()}`;
 
-    // 2. GESTION DU MOUVEMENT GALAXIE
-    galaxyGroup.rotation.y += 0.0001; 
-    nebulaBase.rotation.z += 0.00005;
-    nebulaMid.rotation.y -= 0.00008;
+    // 2. ROTATION DE LA GALAXIE (au lieu de la caméra)
+    // Rotations ÉGALES sur les 3 axes pour une vraie dérive spatiale
+    // Ajuste GALAXY_ROTATION_SPEED en haut du script pour changer la vitesse
+    
+    galaxyGroup.rotation.x += GALAXY_ROTATION_SPEED * (1 + Math.sin(time * 0.3) * ROTATION_VARIATION);
+    galaxyGroup.rotation.y += GALAXY_ROTATION_SPEED * (1 + Math.cos(time * 0.4) * ROTATION_VARIATION);
+    galaxyGroup.rotation.z += GALAXY_ROTATION_SPEED * (1 + Math.sin(time * 0.5) * ROTATION_VARIATION);
+    
+    // 3. LÉGÈRE ROTATION DES NÉBULEUSES (pour plus de vie)
+    nebulaBase.rotation.x += 0.00002;
+    nebulaBase.rotation.y += 0.00005;
+    nebulaBase.rotation.z += 0.00003;
+    
+    nebulaMid.rotation.x -= 0.00003;
+    nebulaMid.rotation.y += 0.00007;
+    nebulaMid.rotation.z -= 0.00002;
+    
+    nebulaHigh.rotation.x += 0.00004;
+    nebulaHigh.rotation.y -= 0.00006;
+    nebulaHigh.rotation.z += 0.00002;
 
-    // 3. ANIMATION DU MODÈLE (Si chargé)
+    // 4. PARALLAXE SUBTILE DES COUCHES D'ÉTOILES
+    starLayers.forEach((layer, index) => {
+        layer.mesh.rotation.y += 0.00003 * layer.speedMultiplier;
+        layer.mesh.rotation.x += 0.00001 * layer.speedMultiplier * Math.sin(time + index);
+    });
+
+    // 5. ANIMATION DU MODÈLE 3D (Si chargé)
     if(window.mainMesh) {
         // Rotation sur les 3 axes
         window.mainMesh.rotation.y += 0.001; // Rotation principale (toupie)
@@ -356,29 +722,6 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight; 
     camera.updateProjectionMatrix(); 
     renderer.setSize(window.innerWidth, window.innerHeight); 
-});
-
-// --- SCROLL ANIMATION ---
-window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const winH = window.innerHeight;
-    
-    if (scrollY < winH * 0.8) {
-        gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    }
-    else if (scrollY >= winH * 0.8 && scrollY < winH * 1.8) {
-        gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    }
-    else if (scrollY >= winH * 1.8 && scrollY < winH * 2.8) {
-        gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    }
-    else {
-        gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" });
-        gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 });
-    }
 });
 
 
@@ -499,3 +842,98 @@ resetInactivityTimer();
 // --- E. INTERACTION SOURIS ---
 playerExpanded.addEventListener('mouseenter', () => clearTimeout(inactivityTimer));
 playerExpanded.addEventListener('mouseleave', () => resetInactivityTimer());
+
+
+// =========================================================
+// --- 10. SCROLL ANIMATION avec ScrollTrigger ---
+// =========================================================
+// On attend que tout soit bien chargé avant de créer les triggers
+
+console.log("🎯 Création des ScrollTriggers...");
+
+// Position HOME (Section #home)
+ScrollTrigger.create({
+    trigger: "#home",
+    start: "top center",
+    end: "bottom center",
+    onEnter: () => {
+        console.log("🏠 Entrée dans HOME");
+        gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
+    },
+    onEnterBack: () => {
+        console.log("🏠 Retour dans HOME");
+        gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
+    }
+});
+
+// Position PROJECTS (Section #projects)
+ScrollTrigger.create({
+    trigger: "#projects",
+    start: "top center",
+    end: "bottom center",
+    onEnter: () => {
+        console.log("💼 Entrée dans PROJECTS");
+        gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
+    },
+    onEnterBack: () => {
+        console.log("💼 Retour dans PROJECTS");
+        gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
+    }
+});
+
+// Position ABOUT (Section #about)
+ScrollTrigger.create({
+    trigger: "#about",
+    start: "top center",
+    end: "bottom center",
+    onEnter: () => {
+        console.log("👤 Entrée dans ABOUT");
+        gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
+    },
+    onEnterBack: () => {
+        console.log("👤 Retour dans ABOUT");
+        gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
+    }
+});
+
+// Position SKILLS (Section #skills)
+ScrollTrigger.create({
+    trigger: "#skills",
+    start: "top center",
+    end: "bottom center",
+    onEnter: () => {
+        console.log("⚡ Entrée dans SKILLS");
+        gsap.to(modelGroup.position, { x: 20, y: 5, z: 8, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5 });
+    },
+    onEnterBack: () => {
+        console.log("⚡ Retour dans SKILLS");
+        gsap.to(modelGroup.position, { x: 20, y: 5, z: 8, duration: 1.5, ease: "power2.out" });
+        gsap.to(modelGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5 });
+    }
+});
+
+// Position CONTACT (Section #contact)
+ScrollTrigger.create({
+    trigger: "#contact",
+    start: "top center",
+    end: "bottom center",
+    onEnter: () => {
+        console.log("📧 Entrée dans CONTACT");
+        gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" });
+        gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 });
+    },
+    onEnterBack: () => {
+        console.log("📧 Retour dans CONTACT");
+        gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" });
+        gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 });
+    }
+});
+
+console.log("✅ ScrollTriggers créés avec succès !");

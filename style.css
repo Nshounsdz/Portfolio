@@ -15,6 +15,107 @@ body {
 /* --- NAV --- */
 nav { position: fixed; top: 0; width: 100%; padding: 30px 5vw; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: exclusion; }
 .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; cursor: pointer;}
+
+/* Switch toggle performance */
+.performance-switch {
+    cursor: pointer;
+    user-select: none;
+}
+
+.switch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.switch-track {
+    position: relative;
+    width: 70px;
+    height: 36px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+/* MODE NORMAL : Liquid Glass */
+body.mode-normal .switch-track {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 
+        inset 2px 2px 6px rgba(255, 255, 255, 0.5),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.5),
+        inset 2px -2px 6px rgba(255, 255, 255, 0.3),
+        inset -2px 2px 6px rgba(255, 255, 255, 0.3),
+        0 5px 15px rgba(0,0,0,0.3);
+    backdrop-filter: url('#liquid-distortion');
+    -webkit-backdrop-filter: url('#liquid-distortion');
+}
+
+/* MODE LÉGER : Blur simple */
+body.mode-light .switch-track {
+    background: rgba(100, 255, 100, 0.15);
+    border: 1px solid rgba(100, 255, 100, 0.4);
+    box-shadow: 
+        inset 0 1px 3px rgba(100, 255, 100, 0.3),
+        0 4px 12px rgba(0,0,0,0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.switch-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.4),
+        inset 1px 1px 3px rgba(255, 255, 255, 0.6);
+}
+
+/* État actif (mode léger) */
+body.mode-light .switch-thumb {
+    left: 38px;
+    background: linear-gradient(135deg, #5fff5f, #4dcc4d);
+    box-shadow: 
+        0 3px 8px rgba(95, 255, 95, 0.5),
+        inset 1px 1px 3px rgba(255, 255, 255, 0.6);
+}
+
+/* Texte de description */
+.switch-description {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+body.mode-normal .switch-description::before {
+    content: 'Passer en mode : Performance';
+}
+
+body.mode-light .switch-description::before {
+    content: 'Passer en mode : Normal';
+}
+
+/* Hover */
+.performance-switch:hover .switch-track {
+    transform: scale(1.08);
+}
+
+body.mode-normal .performance-switch:hover .switch-track {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+body.mode-light .performance-switch:hover .switch-track {
+    border-color: rgba(100, 255, 100, 0.6);
+}
+
 .nav-links a { color: #fff; text-decoration: none; margin-left: 30px; font-weight: 500; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; position: relative; }
 .nav-links a::after { content: ''; position: absolute; width: 0; height: 1px; bottom: -5px; left: 0; background-color: #fff; transition: width 0.3s; }
 .nav-links a:hover::after { width: 100%; }
@@ -90,28 +191,113 @@ h1 { font-size: 8vw; line-height: 0.9; font-weight: 900; margin-bottom: 30px; le
     align-self: center; 
 }
 
-/* --- FLOATING BTN --- */
-#floating-contact {
-    position: fixed; bottom: 40px; right: 40px; width: 70px; height: 70px;
-    display: flex; justify-content: center; align-items: center; cursor: pointer;
-    z-index: 90; opacity: 0; transform: translateY(20px) scale(1); transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.01); border-radius: 50%;
-    
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-    /* CORRECTION 4 ANGLES */
-    box-shadow: 
-        inset 3px 3px 8px rgba(255, 255, 255, 0.5), 
-        inset -3px -3px 8px rgba(255, 255, 255, 0.5),
-        inset 3px -3px 8px rgba(255, 255, 255, 0.3),
-        inset -3px 3px 8px rgba(255, 255, 255, 0.3),
-        0 10px 20px rgba(0,0,0,0.5);
-
-    backdrop-filter: url('#liquid-distortion'); -webkit-backdrop-filter: url('#liquid-distortion');
+/* --- NAVIGATION FLOTTANTE --- */
+.floating-nav-container {
+    position: fixed;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
-#floating-contact svg { width: 24px; height: 24px; fill: white; z-index: 2; transition: fill 0.3s; }
-#floating-contact:hover { transform: scale(1.15) translateY(0) !important; box-shadow: inset 5px 5px 15px rgba(255, 255, 255, 0.3); }
-#floating-contact:hover svg { fill: #fff; filter: drop-shadow(0 0 5px white); }
+
+.floating-nav-container.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.floating-nav-btn {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.01);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    /* LIQUID GLASS EFFECT */
+    box-shadow: 
+        inset 2px 2px 8px rgba(255, 255, 255, 0.5),
+        inset -2px -2px 8px rgba(255, 255, 255, 0.5),
+        inset 2px -2px 8px rgba(255, 255, 255, 0.3),
+        inset -2px 2px 8px rgba(255, 255, 255, 0.3),
+        0 8px 30px rgba(0,0,0,0.5);
+    
+    backdrop-filter: url('#liquid-distortion');
+    -webkit-backdrop-filter: url('#liquid-distortion');
+    
+    transform: scale(1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-nav-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    transition: all 0.3s;
+}
+
+.floating-nav-btn:hover {
+    transform: scale(1.15);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 
+        inset 3px 3px 15px rgba(255, 255, 255, 0.4),
+        inset -3px -3px 15px rgba(255, 255, 255, 0.4),
+        0 10px 40px rgba(0,0,0,0.7);
+}
+
+.floating-nav-btn:hover svg {
+    filter: drop-shadow(0 0 10px white);
+    transform: scale(1.1);
+}
+
+/* Tooltip au survol */
+.floating-nav-btn::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 75px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.floating-nav-btn:hover::before {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .floating-nav-container {
+        right: 20px;
+        gap: 15px;
+    }
+    
+    .floating-nav-btn {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .floating-nav-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
 
 /* --- PROJECTS --- */
 .header-projects { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 1px solid #333; padding-bottom: 20px; width: 100%; }
@@ -272,4 +458,379 @@ h2 { font-size: 4vw; text-transform: uppercase; margin: 0; }
 }
 #volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 0 10px white;
+}
+
+/* =========================================================
+   LOADER SPATIAL
+   ========================================================= */
+
+#loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#loader-container.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Canvas des étoiles */
+#loader-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Contenu du loader */
+.loader-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+/* Logo/Titre */
+.loader-logo {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    text-transform: uppercase;
+    background: linear-gradient(to bottom, #ffffff, #8888ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(136, 136, 255, 0.5);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* Barre de progression */
+.loader-bar-container {
+    width: 400px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 
+        inset 0 1px 3px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(136, 136, 255, 0.2);
+}
+
+.loader-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4444ff, #8888ff, #ffffff);
+    background-size: 200% 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    animation: shimmer 2s linear infinite;
+    box-shadow: 0 0 20px rgba(136, 136, 255, 0.8);
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Pourcentage */
+.loader-percentage {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Messages de chargement */
+.loader-message {
+    font-size: 0.9rem;
+    color: #8888ff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .loader-logo {
+        font-size: 2.5rem;
+    }
+    .loader-bar-container {
+        width: 80%;
+    }
+}
+
+/* =========================================================
+   BOUTON CV TÉLÉCHARGEABLE
+   ========================================================= */
+
+.cv-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.cv-download-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.cv-download-btn:hover svg {
+    transform: translateY(3px);
+}
+
+.cv-download-btn::before {
+    background: rgba(100, 255, 100, 0.05);
+    border: 1px solid rgba(100, 255, 100, 0.4);
+}
+
+.cv-download-btn:hover::before {
+    border-color: rgba(100, 255, 100, 0.7);
+    box-shadow: 
+        inset 4px 4px 20px rgba(100, 255, 100, 0.3), 
+        inset -4px -4px 20px rgba(100, 255, 100, 0.3),
+        0 15px 30px rgba(0,0,0,0.7);
+}
+
+/* =========================================================
+   SECTION COMPÉTENCES
+   ========================================================= */
+
+#skills {
+    align-items: flex-start;
+    padding-top: 150px;
+}
+
+#skills h2 {
+    margin-bottom: 60px;
+    align-self: flex-start;
+}
+
+.skills-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.skill-category {
+    position: relative;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 30px;
+    padding: 40px;
+    
+    /* LIQUID GLASS EFFECT - même style que les autres éléments */
+    box-shadow: 
+        inset 3px 3px 8px rgba(255, 255, 255, 0.5),   
+        inset -3px -3px 8px rgba(255, 255, 255, 0.5), 
+        inset 3px -3px 8px rgba(255, 255, 255, 0.3),  
+        inset -3px 3px 8px rgba(255, 255, 255, 0.3),  
+        0 10px 30px rgba(0,0,0,0.5);
+    
+    backdrop-filter: url('#liquid-distortion');
+    -webkit-backdrop-filter: url('#liquid-distortion');
+    
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.skill-category.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.skill-category:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-5px);
+    box-shadow: 
+        inset 4px 4px 20px rgba(255, 255, 255, 0.4), 
+        inset -4px -4px 20px rgba(255, 255, 255, 0.4), 
+        inset 0 0 30px rgba(255, 255, 255, 0.1),
+        0 15px 40px rgba(0,0,0,0.7);
+}
+
+.skill-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.skill-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.skill-category:hover .skill-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.skill-icon {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+}
+
+.skill-info {
+    flex: 1;
+}
+
+.skill-title-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.skill-info h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+}
+
+.skill-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid;
+}
+
+.skill-badge.expert {
+    background: rgba(100, 255, 100, 0.1);
+    color: #5fff5f;
+    border-color: rgba(100, 255, 100, 0.4);
+    box-shadow: 0 0 20px rgba(100, 255, 100, 0.2);
+}
+
+.skill-badge.advanced {
+    background: rgba(100, 150, 255, 0.1);
+    color: #6fa3ff;
+    border-color: rgba(100, 150, 255, 0.4);
+    box-shadow: 0 0 20px rgba(100, 150, 255, 0.2);
+}
+
+.skill-description {
+    font-size: 0.95rem;
+    color: #aaa;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.skill-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.highlight-item {
+    font-size: 1rem;
+    color: #ddd;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.highlight-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-left-color: #fff;
+    transform: translateX(5px);
+}
+
+@media (max-width: 768px) {
+    .skill-category {
+        padding: 30px 20px;
+    }
+    
+    .skill-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .skill-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .skill-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+/* =========================================================
+   MODE LÉGER (Performance)
+   ========================================================= */
+
+body.mode-light {
+    /* Simplifier tous les effets Liquid Glass */
+}
+
+/* Mode léger : Remplacer Liquid Glass par simple blur */
+body.mode-light .cta-btn::before,
+body.mode-light .filter-btn::before,
+body.mode-light #music-btn-minimized,
+body.mode-light .glass-player,
+body.mode-light .floating-nav-btn,
+body.mode-light .skill-category,
+body.mode-light .liquid-wrapper {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.2),
+        0 5px 15px rgba(0,0,0,0.3) !important;
+}
+
+/* Mode léger : Simplifier les animations */
+body.mode-light * {
+    transition-duration: 0.15s !important;
+}
+
+/* Mode léger : Pas d'animation de distorsion turbulence */
+body.mode-light #turbulence-noise {
+    animation: none !important;
 }
