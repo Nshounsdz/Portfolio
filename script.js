@@ -952,4 +952,18 @@ ScrollTrigger.create({
     }
 });
 
+ // On définit les morceaux de l'adresse
+ var user = "naim.nshou";      // La partie avant le @
+ var domain = "gmail.com";  // La partie après le @
+ 
+ // On récupère l'élément par son ID
+ var mailLink = document.getElementById('email-me');
+ 
+ // On construit l'adresse complète
+ var fullEmail = user + "@" + domain;
+ 
+ // On injecte l'adresse dans le href et le texte du lien
+ mailLink.href = "mailto:" + fullEmail;
+ mailLink.innerHTML = fullEmail;
+
 console.log("✅ ScrollTriggers créés avec succès !");
