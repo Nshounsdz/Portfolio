@@ -305,51 +305,38 @@ function filterProjects(category, btn) {
     });
 }
 
-// --- LAZY LOADING VIDÉOS (Optimisation performances) ---
-// Les vidéos ne se chargent et ne jouent que quand elles sont visibles
-const videoObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        const video = entry.target;
-        
-        if (entry.isIntersecting) {
-            // La vidéo est visible : on la charge
-            if (!video.src && video.dataset.src) {
-                video.src = video.dataset.src;
-                video.load();
-            }
-            
-            // On la joue SEULEMENT en mode normal
-            if (window.videoAutoplayEnabled !== false) {
-                video.play().catch(() => {});
-            }
-        } else {
-            // La vidéo n'est plus visible : pause
-            video.pause();
-        }
-    });
-}, {
-    threshold: 0.2,
-    rootMargin: '200px'
-});
-
-// Appliquer l'observer à toutes les vidéos des cartes projets
+// --- OPTIMISATION VIDÉOS : Poster + Hover to Play ---
+// Les vidéos n'autoplay JAMAIS, elles se jouent seulement au hover
 document.addEventListener('DOMContentLoaded', () => {
     const projectVideos = document.querySelectorAll('.project-card video');
     
     projectVideos.forEach(video => {
-        const source = video.querySelector('source');
-        if (source && source.src) {
-            video.dataset.src = source.src;
-            source.removeAttribute('src');
-        }
+        const card = video.closest('.project-card');
         
+        // Retirer autoplay de toutes les vidéos
         video.removeAttribute('autoplay');
-        video.setAttribute('preload', 'metadata');
+        video.setAttribute('preload', 'none'); // Ne charge rien par défaut
         
-        videoObserver.observe(video);
+        // Hover : Jouer la vidéo (en mode normal seulement)
+        card.addEventListener('mouseenter', () => {
+            if (window.videoAutoplayEnabled !== false) {
+                // Charger et jouer la vidéo
+                video.load(); // Force le chargement
+                video.play().catch(() => {});
+            }
+        });
+        
+        // Mouse leave : Vider la vidéo pour réafficher le poster
+        card.addEventListener('mouseleave', () => {
+            video.pause();
+            video.currentTime = 0;
+            // IMPORTANT : Vider le src pour forcer le retour au poster
+            video.removeAttribute('src');
+            video.load(); // Recharger pour afficher le poster
+        });
     });
     
-    console.log(`✅ Lazy loading activé pour ${projectVideos.length} vidéos`);
+    console.log(`✅ ${projectVideos.length} vidéos optimisées (hover-to-play)`);
 });
 
 // --- 5. ANIMATIONS DIVERSES ---
