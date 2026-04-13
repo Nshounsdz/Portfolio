@@ -16,6 +16,69 @@ body {
 nav { position: fixed; top: 0; width: 100%; padding: 30px 5vw; display: flex; justify-content: space-between; align-items: center; z-index: 100; mix-blend-mode: exclusion; }
 .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; cursor: pointer;}
 
+/* Container pour les contrôles (langue + performance) */
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Bouton langue FR/EN */
+.lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Liquid Glass Effect */
+    box-shadow: 
+        inset 2px 2px 6px rgba(255, 255, 255, 0.4),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.4),
+        0 5px 15px rgba(0,0,0,0.3);
+    backdrop-filter: url('#liquid-distortion') blur(8px);
+    -webkit-backdrop-filter: url('#liquid-distortion') blur(8px);
+}
+
+.lang-toggle:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.lang-flag {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.lang-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Changement de drapeau selon la langue */
+body.lang-en .lang-flag::before {
+    content: '🇬🇧';
+}
+
+body.lang-en .lang-text::before {
+    content: 'EN';
+}
+
+body.lang-fr .lang-flag::before {
+    content: '🇫🇷';
+}
+
+body.lang-fr .lang-text::before {
+    content: 'FR';
+}
+
 /* Switch toggle performance */
 .performance-switch {
     cursor: pointer;

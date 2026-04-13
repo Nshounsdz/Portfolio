@@ -15,6 +15,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    
+    <!-- Système de traduction -->
+    <script src="translations.js"></script>
 </head>
 <body>
 
@@ -43,13 +46,22 @@
 
     <nav>
         <div class="logo" onclick="scrollToSection('#home')">PORTFOLIO.</div>
-        <!-- Switch toggle mode performance -->
-        <div class="performance-switch" onclick="togglePerformanceMode()">
-            <div class="switch-container">
-                <div class="switch-track">
-                    <div class="switch-thumb"></div>
+        
+        <div class="nav-controls">
+            <!-- Bouton langue FR/EN -->
+            <button class="lang-toggle" onclick="switchLanguage(currentLang === 'fr' ? 'en' : 'fr')">
+                <span class="lang-flag">🇫🇷</span>
+                <span class="lang-text">FR</span>
+            </button>
+            
+            <!-- Switch toggle mode performance -->
+            <div class="performance-switch" onclick="togglePerformanceMode()">
+                <div class="switch-container">
+                    <div class="switch-track">
+                        <div class="switch-thumb"></div>
+                    </div>
+                    <span class="switch-description"></span>
                 </div>
-                <span class="switch-description"></span>
             </div>
         </div>
         <!-- Navigation déplacée vers les boutons flottants -->
