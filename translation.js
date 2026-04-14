@@ -6,6 +6,7 @@ const translations = {
     fr: {
         // Navigation
         nav: {
+            home: "Accueil",
             work: "Travaux",
             about: "À propos",
             skills: "Compétences",
@@ -116,6 +117,7 @@ const translations = {
     en: {
         // Navigation
         nav: {
+            home: "Home",
             work: "Work",
             about: "About",
             skills: "Skills",
@@ -266,6 +268,12 @@ function translatePage() {
         } else {
             element.textContent = translation;
         }
+    });
+    
+    // Traduire les tooltips
+    document.querySelectorAll('[data-i18n-tooltip]').forEach(element => {
+        const key = element.getAttribute('data-i18n-tooltip');
+        element.setAttribute('data-tooltip', t(key));
     });
     
     // Traduire les placeholders spécifiques
