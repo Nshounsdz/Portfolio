@@ -34,10 +34,11 @@ const translations = {
         about: {
             title: "À propos",
             subtitle: "Qui je suis",
-            description: "Étudiant en Bachelor 3D Animation et Jeux Vidéo à Ynov Lille, je me spécialise en animation de personnages. Mon objectif est de créer des animations fluides et expressives qui donnent vie aux personnages dans les jeux vidéo et films d'animation.",
+            description: "Salut, moi c'est Naïm. Passionné par la 3D et le rendu temps réel. J'aime créer des univers immersifs et raconter des histoires à travers la lumière et le mouvement.",
             location: "Lille, France",
             availability: "Disponible pour alternance",
-            email: "Email"
+            email: "Email",
+            skillsBtn: "Mes compétences"
         },
         
         // Section Compétences
@@ -77,11 +78,11 @@ const translations = {
         
         // Section Contact
         contact: {
-            title: "Contact",
+            title: "Let's a Go !",
             subtitle: "Travaillons ensemble",
             description: "Je suis actuellement à la recherche d'une alternance pour septembre 2025. N'hésitez pas à me contacter !",
             linkedinBtn: "LinkedIn",
-            emailBtn: "M'envoyer un email"
+            emailBtn: "Contactez-moi"
         },
         
         // Footer
@@ -145,10 +146,11 @@ const translations = {
         about: {
             title: "About",
             subtitle: "Who I am",
-            description: "Student in 3D Animation and Video Games Bachelor at Ynov Lille, I specialize in character animation. My goal is to create fluid and expressive animations that bring characters to life in video games and animated films.",
+            description: "Hi, I'm Naïm. Passionate about 3D and real-time rendering. I love creating immersive worlds and telling stories through light and movement.",
             location: "Lille, France",
             availability: "Available for work-study",
-            email: "Email"
+            email: "Email",
+            skillsBtn: "My skills"
         },
         
         // Section Compétences
@@ -188,11 +190,11 @@ const translations = {
         
         // Section Contact
         contact: {
-            title: "Contact",
+            title: "Let's a Go !",
             subtitle: "Let's work together",
             description: "I'm currently looking for a work-study opportunity for September 2025. Feel free to reach out!",
             linkedinBtn: "LinkedIn",
-            emailBtn: "Send me an email"
+            emailBtn: "Contact me"
         },
         
         // Footer
@@ -232,12 +234,16 @@ const translations = {
 
 let currentLang = localStorage.getItem('language') || 'fr';
 
+// Rendre accessible globalement pour onclick
+window.currentLang = currentLang;
+
 // Vérifier si l'URL contient ?lang=en ou ?lang=fr
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.has('lang')) {
     const urlLang = urlParams.get('lang');
     if (urlLang === 'en' || urlLang === 'fr') {
         currentLang = urlLang;
+        window.currentLang = urlLang;
         localStorage.setItem('language', currentLang);
     }
 }
@@ -295,6 +301,7 @@ function switchLanguage(lang) {
     if (lang === currentLang) return;
     
     currentLang = lang;
+    window.currentLang = lang; // Mettre à jour la variable globale
     localStorage.setItem('language', lang);
     
     // Mettre à jour le body class
@@ -306,6 +313,9 @@ function switchLanguage(lang) {
     
     console.log(`🔄 Langue changée : ${lang}`);
 }
+
+// Rendre accessible globalement
+window.switchLanguage = switchLanguage;
 
 // Initialiser la langue au chargement
 document.addEventListener('DOMContentLoaded', () => {
