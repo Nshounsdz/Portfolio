@@ -15,9 +15,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    
-    <!-- Système de traduction -->
-    <script src="translations.js"></script>
 </head>
 <body>
 
@@ -49,9 +46,9 @@
         
         <div class="nav-controls">
             <!-- Bouton langue FR/EN -->
-            <button class="lang-toggle" onclick="switchLanguage(currentLang === 'fr' ? 'en' : 'fr')">
-                <span class="lang-flag">🇫🇷</span>
-                <span class="lang-text">FR</span>
+            <button class="lang-toggle" onclick="window.switchLanguage(window.currentLang === 'fr' ? 'en' : 'fr'); console.log('Bouton cliqué!');">
+                <span class="lang-flag"></span>
+                <span class="lang-text"></span>
             </button>
             
             <!-- Switch toggle mode performance -->
@@ -651,6 +648,8 @@
         </section>
     </main>
 
+    <!-- Système de traduction - Chargé AVANT script.js -->
+    <script src="translations.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
