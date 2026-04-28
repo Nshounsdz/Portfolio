@@ -234,7 +234,7 @@ const translations = {
 
 let currentLang = localStorage.getItem('language') || 'fr';
 
-// Rendre accessible globalement pour onclick
+// Rendre accessible globalement pour onclick - IMMÉDIATEMENT
 window.currentLang = currentLang;
 
 // Vérifier si l'URL contient ?lang=en ou ?lang=fr
@@ -314,10 +314,11 @@ function switchLanguage(lang) {
     console.log(`🔄 Langue changée : ${lang}`);
 }
 
-// Rendre accessible globalement
+// Rendre accessible globalement - IMMÉDIATEMENT (pas dans DOMContentLoaded)
 window.switchLanguage = switchLanguage;
+window.translatePage = translatePage;
 
-// Initialiser la langue au chargement
+// Initialiser la langue au chargement du DOM
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add(`lang-${currentLang}`);
     translatePage();
