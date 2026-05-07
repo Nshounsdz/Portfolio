@@ -120,7 +120,7 @@
         <section id="home">
             <div class="hero-content">
                 <h1>Nshounsp<br>3D Artist</h1>
-                <p class="tagline">Animation et Rendu 3D.</p>
+                <p class="tagline">Jeux, Animation et Rendu 3D.</p>
             </div>
             <a onclick="scrollToSection('#projects')" class="cta-btn hero-btn">
                 <span>Découvrir mes projets</span>
@@ -138,6 +138,27 @@
                 </div>
             </div>
             <div class="bento-grid">
+
+                <div class="project-card" 
+                    data-category="anim" 
+                    data-type="youtube" 
+                    data-youtube-id="DPN6Lt6gNpc"
+                    data-softs="Unity" 
+                    data-date="Avril 2026" 
+                    onclick="openLightbox(this)">
+                
+                    <div class="media-icon">PLAY</div>
+                    
+                    <!-- Miniature YouTube au lieu de la vidéo -->
+                    <img src="https://img.youtube.com/vi/DPN6Lt6gNpc/maxresdefault.jpg" 
+                         class="card-media" 
+                         alt="Aperçu projet">
+                    
+                    <div class="card-overlay">
+                        <h3>Bat Rush - GameJam Challenge 48h</h3>
+                        <p>Jeux</p>
+                    </div>
+                </div>
 
                 <div class="project-card" 
                     data-category="anim" 
@@ -236,26 +257,6 @@
                     
                     <div class="card-overlay">
                         <h3>Goku Facial Expression</h3>
-                        <p>Animation</p>
-                    </div>
-                </div>
-
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/BenAmar_Naim_Marche.mp4"
-                    data-softs="Maya" 
-                    data-date="Mars 2025" 
-                    onclick="openLightbox(this)">
-    
-                    <div class="media-icon">PLAY</div>
-                    
-                    <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/BenAmar_Naim_Marche.webp">
-                        <source src="projets/anims/BenAmar_Naim_Marche.mp4" type="video/mp4">
-                    </video>
-                    
-                    <div class="card-overlay">
-                        <h3>Walk Cycle</h3>
                         <p>Animation</p>
                     </div>
                 </div>
@@ -486,6 +487,28 @@
 
                 <div class="project-card" 
                     data-category="anim" 
+                    data-type="youtube" 
+                    data-youtube-id="caPDnz4Bs3g"
+                    data-softs="Unity" 
+                    data-date="Avril 2023" 
+                    onclick="openLightbox(this)">
+                
+                    <div class="media-icon">PLAY</div>
+                    
+                    <!-- Miniature YouTube au lieu de la vidéo -->
+                    <img src="https://img.youtube.com/vi/caPDnz4Bs3g/maxresdefault.jpg" 
+                         class="card-media" 
+                         alt="Aperçu projet">
+                    
+                    <div class="card-overlay">
+                        <h3>Flappy Mario</h3>
+                        <p>Jeux</p>
+                    </div>
+                </div>
+
+
+                <div class="project-card" 
+                    data-category="anim" 
                     data-type="video" 
                     data-src="projets/anims/ChildLinkmaster2.mp4"
                     data-softs="Source Filmmaker" 
@@ -571,10 +594,17 @@
                 <div class="skill-category">
                     <div class="skill-header">
                         <div class="skill-icon-wrapper">
-                            <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                                <polyline points="2 17 12 22 22 17"></polyline>
-                                <polyline points="2 12 12 17 22 12"></polyline>
+                            <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Articulation de base (point fixe) -->
+                                <circle cx="6" cy="18" r="2"></circle>
+                                <!-- Articulation centrale (le genou/coude) -->
+                                <circle cx="12" cy="12" r="2"></circle>
+                                <!-- Articulation finale (le pied/main) -->
+                                <circle cx="18" cy="6" r="2"></circle>
+                                
+                                <!-- Lignes de connexion (l'os) -->
+                                <line x1="7.5" y1="16.5" x2="10.5" y2="13.5"></line>
+                                <line x1="13.5" y1="10.5" x2="16.5" y2="7.5"></line>
                             </svg>
                         </div>
                         <div class="skill-info">
@@ -588,6 +618,33 @@
                         <div class="highlight-item">✦ Rig, Skin et Animation d'assets ou de personnages</div>
                         <div class="highlight-item">✦ Animation en Keyframe avancée</div>
                         <div class="highlight-item">✦ Motion Design & Cinématiques</div>
+                    </div>
+                </div>
+
+                <!-- Game Integration -->
+                <div class="skill-category">
+                    <div class="skill-header">
+                        <div class="skill-icon-wrapper">
+                            <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- La barre horizontale au fond -->
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <!-- La pointe de la flèche -->
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <!-- La ligne verticale de la flèche -->
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+                        <div class="skill-info">
+                            <div class="skill-title-row">
+                                <h3>Intégration</h3>
+                            </div>
+                            <p class="skill-description">Intégration d'assets dans différents moteurs de jeux</p>
+                        </div>
+                    </div>
+                    <div class="skill-highlights">
+                        <div class="highlight-item">✦ Intégration Unity</div>
+                        <div class="highlight-item">✦ Intégration Unreal Engine</div>
+                        <div class="highlight-item">✦ Intégration Godot</div>
                     </div>
                 </div>
 

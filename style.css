@@ -403,9 +403,9 @@ h2 { font-size: 4vw; text-transform: uppercase; margin: 0; }
 .about-text { max-width: 800px; font-size: 1.5rem; color: #ccc; margin-bottom: 60px; }
 .software-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 50px; }
 .soft-item { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-.soft-icon { width: 90px; height: 90px; object-fit: contain; filter: grayscale(100%) brightness(1.5); transition: 0.3s; }
+.soft-icon { width: 90px; height: 90px; object-fit: contain; filter: grayscale(50%) brightness(1.5); transition: 0.3s; }
 .soft-item:hover .soft-icon { filter: grayscale(0%) brightness(1); transform: scale(1.1); }
-.soft-name { font-size: 0.8rem; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+.soft-name { font-size: 0.8rem; color: #bbb; letter-spacing: 1px; text-transform: uppercase; }
 
 /* --- CONTACT --- */
 #contact { display: flex; justify-content: center; align-items: center; perspective: 1000px; }
