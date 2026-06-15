@@ -17,9 +17,9 @@ const translations = {
         hero: {
             greeting: "Salut, je suis",
             title: "Animateur 3D",
-            subtitle: "Passionné par l'animation 3D et les jeux vidéo, je crée des personnages qui prennent vie à travers le mouvement et l'émotion.",
-            cta: "Voir mes travaux",
-            downloadCV: "Télécharger CV"
+            subtitle: "Jeux, Animation et Rendu 3D.",
+            cta: "Découvrir mes projets",
+            downloadCV: "Télécharger mon CV"
         },
         
         // Filtres projets
@@ -40,6 +40,12 @@ const translations = {
             email: "Email",
             skillsBtn: "Mes compétences"
         },
+
+        // Boutons de transition entre sections
+        projects: {
+            btn: "À propos de moi",
+            demoreelTitle: "Bande Démo 2026"
+        },
         
         // Section Compétences
         skills: {
@@ -47,6 +53,7 @@ const translations = {
             subtitle: "Ce que je maîtrise",
             animation: {
                 title: "Animation 3D",
+                desc: "Création d'animations fluides et expressives avec attention au timing et à la physique",
                 items: [
                     "Character Animation & Rigging",
                     "HDRI Lighting",
@@ -56,12 +63,21 @@ const translations = {
             },
             modeling: {
                 title: "Modélisation 3D",
+                desc: "Modélisation de personnages, d'assets et d'environnement en 3D",
                 items: [
                     "Hard Surface Modeling",
                     "Character Modeling",
                     "UV Mapping & Texturing",
                     "Topology Optimization"
                 ]
+            },
+            integration: {
+                title: "Intégration",
+                desc: "Intégration d'assets dans différents moteurs de jeux"
+            },
+            lighting: {
+                title: "Lighting & Rendering",
+                desc: "Maîtrise complète de l'éclairage et du rendu photoréaliste"
             },
             software: {
                 title: "Logiciels",
@@ -82,7 +98,7 @@ const translations = {
             subtitle: "Travaillons ensemble",
             description: "Je suis actuellement à la recherche d'une alternance pour septembre 2025. N'hésitez pas à me contacter !",
             linkedinBtn: "LinkedIn",
-            emailBtn: "Contactez-moi"
+            emailBtn: "Me contacter"
         },
         
         // Footer
@@ -92,11 +108,13 @@ const translations = {
             and: "et"
         },
         
-        // Lightbox
+        // Lightbox et fallbacks
         lightbox: {
             software: "Logiciel",
             date: "Date",
-            close: "Fermer"
+            close: "Fermer",
+            unknownSoft: "Logiciel inconnu",
+            unknownDate: "Date inconnue"
         },
         
         // Mode Performance
@@ -110,6 +128,7 @@ const translations = {
             animation: "Animation",
             render: "Render",
             modeling: "Modélisation",
+            game: "Jeux",
             schoolProject: "Projet Scolaire",
             personal: "Projet Personnel"
         }
@@ -129,15 +148,15 @@ const translations = {
         hero: {
             greeting: "Hi, I'm",
             title: "3D Animator",
-            subtitle: "Passionate about 3D animation and video games, I create characters that come to life through movement and emotion.",
-            cta: "View my work",
-            downloadCV: "Download CV"
+            subtitle: "Games, Animation and 3D Rendering.",
+            cta: "Discover my projects",
+            downloadCV: "Download my Resume"
         },
         
         // Filtres projets
         filters: {
             all: "All",
-            anim: "Animations",
+            anim: "Animation",
             model: "Modeling",
             render: "Renders"
         },
@@ -152,6 +171,12 @@ const translations = {
             email: "Email",
             skillsBtn: "My skills"
         },
+
+        // Boutons de transition entre sections
+        projects: {
+            btn: "About me",
+            demoreelTitle: "Demo Reel 2026"
+        },
         
         // Section Compétences
         skills: {
@@ -159,6 +184,7 @@ const translations = {
             subtitle: "What I master",
             animation: {
                 title: "3D Animation",
+                desc: "Creating fluid and expressive animations with a focus on timing and physics",
                 items: [
                     "Character Animation & Rigging",
                     "HDRI Lighting",
@@ -168,12 +194,21 @@ const translations = {
             },
             modeling: {
                 title: "3D Modeling",
+                desc: "3D modeling of characters, assets, and environments",
                 items: [
                     "Hard Surface Modeling",
                     "Character Modeling",
                     "UV Mapping & Texturing",
                     "Topology Optimization"
                 ]
+            },
+            integration: {
+                title: "Integration",
+                desc: "Asset integration in various game engines"
+            },
+            lighting: {
+                title: "Lighting & Rendering",
+                desc: "Complete mastery of lighting and photorealistic rendering"
             },
             software: {
                 title: "Software",
@@ -204,11 +239,13 @@ const translations = {
             and: "and"
         },
         
-        // Lightbox
+        // Lightbox et fallbacks
         lightbox: {
             software: "Software",
             date: "Date",
-            close: "Close"
+            close: "Close",
+            unknownSoft: "Unknown software",
+            unknownDate: "Unknown date"
         },
         
         // Mode Performance
@@ -222,6 +259,7 @@ const translations = {
             animation: "Animation",
             render: "Render",
             modeling: "Modeling",
+            game: "Games",
             schoolProject: "School Project",
             personal: "Personal Project"
         }
@@ -233,8 +271,6 @@ const translations = {
 // =========================================================
 
 let currentLang = localStorage.getItem('language') || 'fr';
-
-// Rendre accessible globalement pour onclick - IMMÉDIATEMENT
 window.currentLang = currentLang;
 
 // Vérifier si l'URL contient ?lang=en ou ?lang=fr
@@ -253,15 +289,15 @@ function t(key) {
     let value = translations[currentLang];
     
     for (const k of keys) {
-        value = value[k];
+        if (value) value = value[k];
         if (value === undefined) {
             console.warn(`Translation key not found: ${key}`);
             return key;
         }
     }
-    
     return value;
 }
+window.t = t;
 
 function translatePage() {
     // Traduire tous les éléments avec data-i18n
@@ -272,7 +308,7 @@ function translatePage() {
         if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
             element.placeholder = translation;
         } else {
-            element.textContent = translation;
+            element.innerHTML = translation;
         }
     });
     
@@ -282,18 +318,6 @@ function translatePage() {
         element.setAttribute('data-tooltip', t(key));
     });
     
-    // Traduire les placeholders spécifiques
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-        const key = element.getAttribute('data-i18n-placeholder');
-        element.placeholder = t(key);
-    });
-    
-    // Traduire les attributs alt des images
-    document.querySelectorAll('[data-i18n-alt]').forEach(element => {
-        const key = element.getAttribute('data-i18n-alt');
-        element.alt = t(key);
-    });
-    
     console.log(`🌍 Page traduite en ${currentLang === 'fr' ? 'Français' : 'English'}`);
 }
 
@@ -301,20 +325,15 @@ function switchLanguage(lang) {
     if (lang === currentLang) return;
     
     currentLang = lang;
-    window.currentLang = lang; // Mettre à jour la variable globale
+    window.currentLang = lang;
     localStorage.setItem('language', lang);
     
-    // Mettre à jour le body class
     document.body.classList.remove('lang-fr', 'lang-en');
     document.body.classList.add(`lang-${lang}`);
     
-    // Traduire la page
     translatePage();
-    
-    console.log(`🔄 Langue changée : ${lang}`);
 }
 
-// Rendre accessible globalement - IMMÉDIATEMENT (pas dans DOMContentLoaded)
 window.switchLanguage = switchLanguage;
 window.translatePage = translatePage;
 

@@ -49,9 +49,16 @@ nav { position: fixed; top: 0; width: 100%; padding: 30px 5vw; display: flex; ju
     transform: scale(1.05);
 }
 
+/* L'emplacement du drapeau devient une vraie boîte à image */
 .lang-flag {
-    font-size: 20px;
+    display: inline-block;
+    width: 24px;
+    height: 18px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 3px; /* Petits bords arrondis */
     transition: transform 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3); /* Légère ombre pour faire ressortir le drapeau */
 }
 
 .lang-text {
@@ -62,22 +69,17 @@ nav { position: fixed; top: 0; width: 100%; padding: 30px 5vw; display: flex; ju
     letter-spacing: 1px;
 }
 
-/* Changement de drapeau selon la langue */
-body.lang-en .lang-flag::before {
-    content: '🇬🇧';
-}
+/* On utilise des images fiables pour les drapeaux via FlagCDN */
+body.lang-en .lang-flag { background-image: url('https://flagcdn.com/w40/gb.png'); }
+body.lang-fr .lang-flag { background-image: url('https://flagcdn.com/w40/fr.png'); }
 
-body.lang-en .lang-text::before {
-    content: 'EN';
-}
+/* Le texte (EN / FR) reste géré en CSS */
+body.lang-en .lang-text::before { content: 'EN'; }
+body.lang-fr .lang-text::before { content: 'FR'; }
 
-body.lang-fr .lang-flag::before {
-    content: '🇫🇷';
-}
-
-body.lang-fr .lang-text::before {
-    content: 'FR';
-}
+/* Par sécurité, on vide le contenu texte de l'ancien système d'emoji */
+body.lang-en .lang-flag::before,
+body.lang-fr .lang-flag::before { content: ''; }
 
 /* Switch toggle performance */
 .performance-switch {
@@ -360,6 +362,85 @@ h1 { font-size: 8vw; line-height: 0.9; font-weight: 900; margin-bottom: 30px; le
         width: 20px;
         height: 20px;
     }
+}
+
+/* =========================================================
+   DEMO REEL & ANTI-BUG IFRAME
+   ========================================================= */
+.demoreel-wrapper {
+    width: 100%;
+    margin-bottom: 80px; 
+    display: flex;
+    justify-content: center;
+}
+
+.demoreel-content {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espace entre la vidéo et le titre */
+}
+
+.demoreel-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    position: relative; /* Indispensable pour l'overlay */
+    
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.demoreel-container:hover {
+    transform: translateY(-5px) scale(1.01);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.demoreel-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    pointer-events: none; /* YouTube ignore la souris par défaut */
+}
+
+/* La vitre de protection qui capte le scroll */
+.demoreel-overlay {
+    position: absolute;
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Style du titre */
+.demoreel-title {
+    text-align: center;
+}
+
+.demoreel-title h3 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.demoreel-title p {
+    color: #aaa;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .demoreel-wrapper { margin-bottom: 50px; }
+    .demoreel-container { border-radius: 12px; }
+    .demoreel-title h3 { font-size: 1.5rem; }
 }
 
 /* --- PROJECTS --- */

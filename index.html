@@ -6,7 +6,6 @@
     <title>Portfolio 3D - Nshounsp</title>
     
     <link rel="stylesheet" href="style.css">
-
     <link rel="icon" type="image/x-icon" href="media/icon.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -18,7 +17,6 @@
 </head>
 <body>
 
-    <!-- LOADER SPATIAL -->
     <div id="loader-container">
         <canvas id="loader-stars"></canvas>
         <div class="loader-content">
@@ -35,7 +33,6 @@
         <defs>
             <filter id="liquid-distortion" x="-50%" y="-50%" width="200%" height="200%">
                 <feTurbulence id="turbulence-noise" type="turbulence" baseFrequency="0.02" numOctaves="3" seed="5" result="noise" />
-            
                 <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
             </filter>
         </defs>
@@ -45,13 +42,11 @@
         <div class="logo" onclick="scrollToSection('#home')">PORTFOLIO.</div>
         
         <div class="nav-controls">
-            <!-- Bouton langue FR/EN -->
             <button class="lang-toggle" onclick="window.switchLanguage(window.currentLang === 'fr' ? 'en' : 'fr'); console.log('Bouton cliqué!');">
                 <span class="lang-flag"></span>
                 <span class="lang-text"></span>
             </button>
             
-            <!-- Switch toggle mode performance -->
             <div class="performance-switch" onclick="togglePerformanceMode()">
                 <div class="switch-container">
                     <div class="switch-track">
@@ -61,11 +56,9 @@
                 </div>
             </div>
         </div>
-        <!-- Navigation déplacée vers les boutons flottants -->
     </nav>
 
     <div id="music-player-container">
-        
         <div id="music-btn-minimized" onclick="togglePlayer(true)">
             <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" fill="white"/></svg>
         </div>
@@ -74,13 +67,11 @@
             <div class="track-info">
                 <span id="track-name">Select Track</span>
             </div>
-            
             <div class="player-controls">
                 <button class="ctrl-btn" onclick="prevTrack()">⏮</button>
                 <button class="ctrl-btn main-play" onclick="togglePlay()">▶</button>
                 <button class="ctrl-btn" onclick="nextTrack()">⏭</button>
             </div>
-
             <div class="volume-container">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                 <input type="range" id="volume-slider" min="0" max="1" step="any" value="0.1" oninput="setVolume(this.value)">
@@ -90,7 +81,6 @@
 
     <div id="webgl-container"></div>
 
-    <!-- Navigation flottante -->
     <div id="floating-nav" class="floating-nav-container">
         <div class="floating-nav-btn" onclick="scrollToSection('#home')" data-i18n-tooltip="nav.home" data-tooltip="Accueil">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -109,7 +99,6 @@
         </div>
     </div>
 
-
     <div id="lightbox" onclick="closeLightbox()">
         <div id="close-btn">&times;</div>
         <div id="lightbox-content"></div>
@@ -120,435 +109,259 @@
         <section id="home">
             <div class="hero-content">
                 <h1>Nshounsp<br>3D Artist</h1>
-                <p class="tagline">Jeux, Animation et Rendu 3D.</p>
+                <p class="tagline" data-i18n="hero.subtitle">Jeux, Animation et Rendu 3D.</p>
             </div>
             <a onclick="scrollToSection('#projects')" class="cta-btn hero-btn">
-                <span>Découvrir mes projets</span>
+                <span data-i18n="hero.cta">Découvrir mes projets</span>
                 <div class="arrow">↓</div>
             </a>
         </section>
 
         <section id="projects">
             <div class="header-projects">
-                <h2>Travaux</h2>
+                <h2 data-i18n="nav.work">Travaux</h2>
                 <div class="filter-container">
                     <button class="filter-btn active" onclick="filterProjects('all', this)" data-i18n="filters.all">Tout</button>
                     <button class="filter-btn" onclick="filterProjects('render', this)" data-i18n="filters.render">Rendus</button>
                     <button class="filter-btn" onclick="filterProjects('anim', this)" data-i18n="filters.anim">Animation</button>
                 </div>
             </div>
+
+            <div class="demoreel-wrapper">
+                <div class="demoreel-content">
+                    
+                    <div class="demoreel-container">
+                        <iframe 
+                            src="https://www.youtube.com/embed/HabQbTqWiWc?rel=0&showinfo=0&color=white" 
+                            title="Demo Reel 3D Nshounsp" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                        <div class="demoreel-overlay"></div>
+                    </div>
+    
+                    <div class="demoreel-title">
+                        <h3 data-i18n="projects.demoreelTitle">Bande Démo 2026</h3>
+                        <p data-i18n="projectTypes.animation">Animation</p>
+                    </div>
+    
+                </div>
+            </div>
+
             <div class="bento-grid">
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/sm64_intro_remake.mp4"
-                    data-softs="Blender" 
-                    data-date="Juin 2026" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/sm64_intro_remake.mp4" data-softs="Blender" data-date="Juin 2026" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/sm64_intro_remake.png">
                         <source src="projets/anims/sm64_intro_remake.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Super Mario 64 Intro Remake</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="youtube" 
-                    data-youtube-id="DPN6Lt6gNpc"
-                    data-softs="Unity" 
-                    data-date="Avril 2026" 
-                    onclick="openLightbox(this)">
-                
+                <div class="project-card" data-category="anim" data-type="youtube" data-youtube-id="DPN6Lt6gNpc" data-softs="Unity" data-date="Avril 2026" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
-                    <!-- Miniature YouTube au lieu de la vidéo -->
-                    <img src="https://img.youtube.com/vi/DPN6Lt6gNpc/maxresdefault.jpg" 
-                         class="card-media" 
-                         alt="Aperçu projet">
-                    
+                    <img src="https://img.youtube.com/vi/DPN6Lt6gNpc/maxresdefault.jpg" class="card-media" alt="Aperçu projet">
                     <div class="card-overlay">
                         <h3>Bat Rush - GameJam Challenge 48h</h3>
-                        <p>Jeux</p>
+                        <p data-i18n="projectTypes.game">Jeux</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/marioruncycle.mp4"
-                    data-softs="Blender" 
-                    data-date="Avril 2026" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/marioruncycle.mp4" data-softs="Blender" data-date="Avril 2026" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/marioruncycle.webp">
                         <source src="projets/anims/marioruncycle.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Mario Run Cycle</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="youtube" 
-                    data-youtube-id="wZJHZZeIWnA"
-                    data-softs="Blender" 
-                    data-date="Février 2026" 
-                    onclick="openLightbox(this)">
-                
+                <div class="project-card" data-category="anim" data-type="youtube" data-youtube-id="wZJHZZeIWnA" data-softs="Blender" data-date="Février 2026" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
-                    <!-- Miniature YouTube au lieu de la vidéo -->
-                    <img src="https://img.youtube.com/vi/wZJHZZeIWnA/maxresdefault.jpg" 
-                         class="card-media" 
-                         alt="Aperçu projet">
-                    
+                    <img src="https://img.youtube.com/vi/wZJHZZeIWnA/maxresdefault.jpg" class="card-media" alt="Aperçu projet">
                     <div class="card-overlay">
                         <h3>Goku's "I Am" Speech</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/marioanim2.mp4"
-                    data-softs="Blender" 
-                    data-date="Janvier 2026" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/marioanim2.mp4" data-softs="Blender" data-date="Janvier 2026" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/marioanim2.webp">
                         <source src="projets/anims/marioanim2.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Mario Landing Pose</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/HUNTED_comp.mp4"
-                    data-softs="Maya" 
-                    data-date="Juin 2025" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/HUNTED_comp.mp4" data-softs="Maya" data-date="Juin 2025" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/HUNTED_comp.webp">
                         <source src="projets/anims/HUNTED_comp.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Hunted</h3>
-                        <p>School Project Animation</p>
+                        <p data-i18n="projectTypes.schoolProject">School Project Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/gokuanimtest1.mp4"
-                    data-softs="Blender" 
-                    data-date="Avril 2025" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/gokuanimtest1.mp4" data-softs="Blender" data-date="Avril 2025" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/gokuanimtest1.webp">
                         <source src="projets/anims/gokuanimtest1.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Goku Facial Expression</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                 <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/ssj1.webp"
-                    data-softs="Blender" 
-                    data-date="Janvier 2025" 
-                    onclick="openLightbox(this)">
-    
+                 <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/ssj1.webp" data-softs="Blender" data-date="Janvier 2025" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/ssj1.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Goku Super Saiyan</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/base.webp"
-                    data-softs="Blender" 
-                    data-date="Janvier 2025" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/base.webp" data-softs="Blender" data-date="Janvier 2025" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/base.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Son Goku</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/widekame.webp"
-                    data-softs="Blender" 
-                    data-date="Novembre 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/widekame.webp" data-softs="Blender" data-date="Novembre 2024" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/widekame.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Goku KAMEHAMEHA</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/widegoku.webp"
-                    data-softs="Blender" 
-                    data-date="Novembre 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/widegoku.webp" data-softs="Blender" data-date="Novembre 2024" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/widegoku.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Goku Dragon Ball SUPER</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/finalHD.mp4"
-                    data-softs="Blender" 
-                    data-date="Mai 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/finalHD.mp4" data-softs="Blender" data-date="Mai 2024" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/finalHD.webp">
                         <source src="projets/anims/finalHD.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>"You're gonna PAY for that !"</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/grosdef.webp"
-                    data-softs="Blender" 
-                    data-date="Avril 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/grosdef.webp" data-softs="Blender" data-date="Avril 2024" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/grosdef.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Gros défouloir</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/rendumine.mp4"
-                    data-softs="Blender" 
-                    data-date="Avril 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/rendumine.mp4" data-softs="Blender" data-date="Avril 2024" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/rendumine.webp">
                         <source src="projets/anims/rendumine.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Skyblock</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/rendu.mp4"
-                    data-softs="Blender" 
-                    data-date="Avril 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/rendu.mp4" data-softs="Blender" data-date="Avril 2024" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/rendu.webp">
                         <source src="projets/anims/rendu.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Le Voyage des Âmes</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/sm64ds.mp4"
-                    data-softs="Blender" 
-                    data-date="Avril 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/sm64ds.mp4" data-softs="Blender" data-date="Avril 2024" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none">
                         <source src="projets/anims/sm64ds.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Super Mario 64 DS Movie</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/wii.webp"
-                    data-softs="Blender" 
-                    data-date="Mars 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/wii.webp" data-softs="Blender" data-date="Mars 2024" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/wii.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Movie Mario Bros. WII</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/2low.webp"
-                    data-softs="Blender" 
-                    data-date="Mars 2024" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/2low.webp" data-softs="Blender" data-date="Mars 2024" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/2low.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Movie Mario Dance Dance Revolution</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="render" 
-                    data-type="image" 
-                    data-src="projets/renders/mario64render.webp"
-                    data-softs="Blender" 
-                    data-date="Janvier 2023" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="render" data-type="image" data-src="projets/renders/mario64render.webp" data-softs="Blender" data-date="Janvier 2023" onclick="openLightbox(this)">
                     <div class="media-icon">IMG</div>
-    
                     <img src="projets/renders/mario64render.webp" class="card-media" alt="Aperçu projet" loading="lazy">
-    
                     <div class="card-overlay">
                         <h3>Super Mario Render 96</h3>
-                        <p>Render</p>
+                        <p data-i18n="projectTypes.render">Render</p>
                     </div>
                 </div>
 
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="youtube" 
-                    data-youtube-id="caPDnz4Bs3g"
-                    data-softs="Unity" 
-                    data-date="Avril 2023" 
-                    onclick="openLightbox(this)">
-                
+                <div class="project-card" data-category="anim" data-type="youtube" data-youtube-id="caPDnz4Bs3g" data-softs="Unity" data-date="Avril 2023" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
-                    <!-- Miniature YouTube au lieu de la vidéo -->
-                    <img src="https://img.youtube.com/vi/caPDnz4Bs3g/maxresdefault.jpg" 
-                         class="card-media" 
-                         alt="Aperçu projet">
-                    
+                    <img src="https://img.youtube.com/vi/caPDnz4Bs3g/maxresdefault.jpg" class="card-media" alt="Aperçu projet">
                     <div class="card-overlay">
                         <h3>Flappy Mario</h3>
-                        <p>Jeux</p>
+                        <p data-i18n="projectTypes.game">Jeux</p>
                     </div>
                 </div>
 
-
-                <div class="project-card" 
-                    data-category="anim" 
-                    data-type="video" 
-                    data-src="projets/anims/ChildLinkmaster2.mp4"
-                    data-softs="Source Filmmaker" 
-                    data-date="Juin 2020" 
-                    onclick="openLightbox(this)">
-    
+                <div class="project-card" data-category="anim" data-type="video" data-src="projets/anims/ChildLinkmaster2.mp4" data-softs="Source Filmmaker" data-date="Juin 2020" onclick="openLightbox(this)">
                     <div class="media-icon">PLAY</div>
-                    
                     <video class="card-media" muted loop playsinline preload="none" poster="projets/anims/posters/ChildLinkmaster2.webp">
                         <source src="projets/anims/ChildLinkmaster2.mp4" type="video/mp4">
                     </video>
-                    
                     <div class="card-overlay">
                         <h3>Link Enfant devant l'Épée de Légende</h3>
-                        <p>Animation</p>
+                        <p data-i18n="projectTypes.animation">Animation</p>
                     </div>
                 </div>
             </div>
             <a onclick="scrollToSection('#about')" class="cta-btn project-btn">
-                <span>À propos de moi</span>
+                <span data-i18n="projects.btn">À propos de moi</span>
                 <div class="arrow">↓</div>
             </a>
         </section>
@@ -566,7 +379,6 @@
                 <div class="soft-item"><img src="media/ue.png" class="soft-icon"><span class="soft-name">Unreal Engine</span></div>
             </div>
             
-            <!-- Bouton CV téléchargeable -->
             <a href="media/CV - Naïm Ben Amar - Animateur 3D.pdf" target="_blank" rel="noopener noreferrer" class="cta-btn cv-download-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -586,7 +398,6 @@
             <h2 data-i18n="skills.title">Compétences</h2>
             <div class="skills-container">
                 
-                <!-- Modélisation 3D -->
                 <div class="skill-category">
                     <div class="skill-header">
                         <div class="skill-icon-wrapper">
@@ -598,9 +409,9 @@
                         </div>
                         <div class="skill-info">
                             <div class="skill-title-row">
-                                <h3>Modélisation 3D</h3>
+                                <h3 data-i18n="skills.modeling.title">Modélisation 3D</h3>
                             </div>
-                            <p class="skill-description">Modélisation de personnages, d'assets et d'environnement en 3D</p>
+                            <p class="skill-description" data-i18n="skills.modeling.desc">Modélisation de personnages, d'assets et d'environnement en 3D</p>
                         </div>
                     </div>
                     <div class="skill-highlights">
@@ -610,28 +421,22 @@
                     </div>
                 </div>
 
-                <!-- Animation 3D -->
                 <div class="skill-category">
                     <div class="skill-header">
                         <div class="skill-icon-wrapper">
                             <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <!-- Articulation de base (point fixe) -->
                                 <circle cx="6" cy="18" r="2"></circle>
-                                <!-- Articulation centrale (le genou/coude) -->
                                 <circle cx="12" cy="12" r="2"></circle>
-                                <!-- Articulation finale (le pied/main) -->
                                 <circle cx="18" cy="6" r="2"></circle>
-                                
-                                <!-- Lignes de connexion (l'os) -->
                                 <line x1="7.5" y1="16.5" x2="10.5" y2="13.5"></line>
                                 <line x1="13.5" y1="10.5" x2="16.5" y2="7.5"></line>
                             </svg>
                         </div>
                         <div class="skill-info">
                             <div class="skill-title-row">
-                                <h3>Animation 3D</h3>
+                                <h3 data-i18n="skills.animation.title">Animation 3D</h3>
                             </div>
-                            <p class="skill-description">Création d'animations fluides et expressives avec attention au timing et à la physique</p>
+                            <p class="skill-description" data-i18n="skills.animation.desc">Création d'animations fluides et expressives avec attention au timing et à la physique</p>
                         </div>
                     </div>
                     <div class="skill-highlights">
@@ -641,24 +446,20 @@
                     </div>
                 </div>
 
-                <!-- Game Integration -->
                 <div class="skill-category">
                     <div class="skill-header">
                         <div class="skill-icon-wrapper">
                             <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <!-- La barre horizontale au fond -->
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <!-- La pointe de la flèche -->
                                 <polyline points="7 10 12 15 17 10"></polyline>
-                                <!-- La ligne verticale de la flèche -->
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
                         </div>
                         <div class="skill-info">
                             <div class="skill-title-row">
-                                <h3>Intégration</h3>
+                                <h3 data-i18n="skills.integration.title">Intégration</h3>
                             </div>
-                            <p class="skill-description">Intégration d'assets dans différents moteurs de jeux</p>
+                            <p class="skill-description" data-i18n="skills.integration.desc">Intégration d'assets dans différents moteurs de jeux</p>
                         </div>
                     </div>
                     <div class="skill-highlights">
@@ -668,7 +469,6 @@
                     </div>
                 </div>
 
-                <!-- Lighting/Rendering -->
                 <div class="skill-category">
                     <div class="skill-header">
                         <div class="skill-icon-wrapper">
@@ -686,9 +486,9 @@
                         </div>
                         <div class="skill-info">
                             <div class="skill-title-row">
-                                <h3>Lighting & Rendering</h3>
+                                <h3 data-i18n="skills.lighting.title">Lighting & Rendering</h3>
                             </div>
-                            <p class="skill-description">Maîtrise complète de l'éclairage et du rendu photoréaliste</p>
+                            <p class="skill-description" data-i18n="skills.lighting.desc">Maîtrise complète de l'éclairage et du rendu photoréaliste</p>
                         </div>
                     </div>
                     <div class="skill-highlights">
@@ -700,8 +500,8 @@
 
             </div>
             <a onclick="scrollToSection('#contact')" class="cta-btn about-btn">
-                <span>Me contacter</span>
-                <div class="arrow">↓</div>
+                <span data-i18n="contact.emailBtn">Me contacter</span>
+                <div class="arrow"></div>
             </a>
         </section>
 
@@ -725,7 +525,6 @@
         </section>
     </main>
 
-    <!-- Système de traduction - Chargé AVANT script.js -->
     <script src="translation.js"></script>
     <script src="script.js"></script>
 </body>

@@ -4,54 +4,34 @@ console.log("✅ Script.js chargé !");
 // --- SYSTÈME DE MODES DE PERFORMANCE ---
 // =========================================================
 
-// Récupérer le mode sauvegardé (par défaut: normal)
 let performanceMode = localStorage.getItem('performanceMode') || 'normal';
 document.body.classList.add(`mode-${performanceMode}`);
 
-// Fonction pour toggle entre les modes
 function togglePerformanceMode() {
     if (performanceMode === 'normal') {
         performanceMode = 'light';
     } else {
         performanceMode = 'normal';
     }
-    
-    // Sauvegarder la préférence
     localStorage.setItem('performanceMode', performanceMode);
-    
-    // Recharger la page pour appliquer tous les changements (y compris les étoiles)
     location.reload();
 }
 
-// Appliquer les optimisations selon le mode
 function applyPerformanceMode() {
     if (performanceMode === 'light') {
-        // MODE LÉGER : Optimisations
         console.log('⚡ Mode léger activé');
-        
-        // Désactiver le lazy loading des vidéos
         window.videoAutoplayEnabled = false;
-        
-        // Réduire les étoiles
         window.reducedStars = true;
-        
     } else {
-        // MODE NORMAL : Performances complètes
         console.log('🚀 Mode normal activé');
-        
-        // Réactiver les vidéos
         window.videoAutoplayEnabled = true;
-        
-        // Étoiles complètes
         window.reducedStars = false;
     }
 }
-
-// Appliquer le mode au chargement
 applyPerformanceMode();
 
 // =========================================================
-// --- LOADER SPATIAL ---
+// --- LOADER SPATIAL TRADUIT ---
 // =========================================================
 
 const loaderContainer = document.getElementById('loader-container');
@@ -61,11 +41,9 @@ const loaderMessage = document.getElementById('loader-message');
 const loaderStarsCanvas = document.getElementById('loader-stars');
 const loaderCtx = loaderStarsCanvas.getContext('2d');
 
-// Configuration du canvas
 loaderStarsCanvas.width = window.innerWidth;
 loaderStarsCanvas.height = window.innerHeight;
 
-// Création des étoiles pour le loader
 const loaderStars = [];
 for (let i = 0; i < 200; i++) {
     loaderStars.push({
@@ -77,7 +55,6 @@ for (let i = 0; i < 200; i++) {
     });
 }
 
-// Animation des étoiles du loader
 function animateLoaderStars() {
     loaderCtx.clearRect(0, 0, loaderStarsCanvas.width, loaderStarsCanvas.height);
     
@@ -87,11 +64,9 @@ function animateLoaderStars() {
         loaderCtx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         loaderCtx.fill();
         
-        // Faire scintiller
         star.opacity += (Math.random() - 0.5) * 0.05;
         star.opacity = Math.max(0.1, Math.min(1, star.opacity));
         
-        // Déplacer vers le bas
         star.y += star.speed;
         if (star.y > loaderStarsCanvas.height) {
             star.y = 0;
@@ -105,7 +80,6 @@ function animateLoaderStars() {
 }
 animateLoaderStars();
 
-// Système de progression du loader
 let loadProgress = 0;
 let assetsLoaded = {
     scripts: false,
@@ -113,7 +87,14 @@ let assetsLoaded = {
     fonts: false
 };
 
-const loadMessages = [
+// Choix des messages selon la langue globale active
+const loadMessages = window.currentLang === 'en' ? [
+    "Initializing...",
+    "Loading stars...",
+    "Preparing the galaxy...",
+    "Loading 3D models...",
+    "Finalizing..."
+] : [
     "Initialisation...",
     "Chargement des étoiles...",
     "Préparation de la galaxie...",
@@ -127,7 +108,6 @@ function updateLoader(progress, force = false) {
         loaderBar.style.width = progress + '%';
         loaderPercentage.textContent = Math.floor(progress) + '%';
         
-        // Changer le message selon la progression
         if (progress < 20) loaderMessage.textContent = loadMessages[0];
         else if (progress < 40) loaderMessage.textContent = loadMessages[1];
         else if (progress < 60) loaderMessage.textContent = loadMessages[2];
@@ -145,31 +125,26 @@ function checkAllAssetsLoaded() {
     }
 }
 
-// Démarrer avec 10% (scripts chargés)
 updateLoader(10);
 
-// Simuler le chargement des fonts
 document.fonts.ready.then(() => {
     assetsLoaded.fonts = true;
     updateLoader(30);
     checkAllAssetsLoaded();
 });
 
-// Les scripts sont chargés
 setTimeout(() => {
     assetsLoaded.scripts = true;
     updateLoader(50);
     checkAllAssetsLoaded();
 }, 500);
 
-// Le modèle 3D sera marqué comme chargé plus tard dans le code
 window.loaderModelLoaded = function() {
     assetsLoaded.models = true;
     updateLoader(90);
     checkAllAssetsLoaded();
 };
 
-// Fallback: si rien ne se passe après 8 secondes, on retire le loader
 setTimeout(() => {
     if (!loaderContainer.classList.contains('hidden')) {
         console.log("⚠️ Loader timeout - fermeture forcée");
@@ -177,7 +152,7 @@ setTimeout(() => {
     }
 }, 8000);
 
-// --- 1. LENIS (Smooth Scroll) ---
+// --- LENIS (Smooth Scroll) ---
 const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', smooth: true });
 function raf(time) { 
     lenis.raf(time); 
@@ -185,21 +160,20 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// --- 2. GSAP SCROLL & NAV ---
+// --- GSAP SCROLL & NAV ---
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-// 🔥 IMPORTANT : Connecter Lenis à ScrollTrigger
 lenis.on('scroll', ScrollTrigger.update);
 
 gsap.ticker.add((time)=>{
   lenis.raf(time * 1000);
 });
-
 gsap.ticker.lagSmoothing(0);
 
 function scrollToSection(id) { gsap.to(window, { duration: 1.5, scrollTo: id, ease: "power3.inOut" }); }
 
-// --- 3. LIGHTBOX ---
+// =========================================================
+// --- LIGHTBOX DYNAMIQUE TRADUITE ---
+// =========================================================
 const lightbox = document.getElementById('lightbox');
 const lightboxContent = document.getElementById('lightbox-content');
 const lightboxCaption = document.getElementById('lightbox-caption');
@@ -209,21 +183,19 @@ function openLightbox(card) {
     const src = card.getAttribute('data-src');
     const youtubeId = card.getAttribute('data-youtube-id');
     
-    // 1. RÉCUPÉRATION DES NOUVELLES INFOS
     const title = card.querySelector('h3').innerText;
-    const softs = card.getAttribute('data-softs') || "Logiciel inconnu";
-    const date = card.getAttribute('data-date') || "Date inconnue";
+    
+    // Récupération et traduction dynamique des valeurs fallbacks via t()
+    const softs = card.getAttribute('data-softs') || window.t('lightbox.unknownSoft');
+    const date = card.getAttribute('data-date') || window.t('lightbox.unknownDate');
 
     lightboxContent.innerHTML = '';
     
-    // 2. CRÉATION DU CONTENEUR MÉDIA
     const wrapper = document.createElement('div');
-    wrapper.style.display = 'flex';
-    wrapper.style.flexDirection = 'column';
-    wrapper.style.alignItems = 'center';
-    wrapper.style.gap = '15px';
+    wrapper.style.display = 'block';
+    wrapper.style.margin = 'auto';
+    wrapper.style.textAlign = 'center';
     
-    // GESTION YOUTUBE
     if (type === 'youtube' && youtubeId) {
         const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
@@ -238,7 +210,6 @@ function openLightbox(card) {
         iframe.setAttribute('allowfullscreen', '');
         wrapper.appendChild(iframe);
     }
-    // GESTION VIDÉO LOCALE
     else if (type === 'video') {
         const video = document.createElement('video'); 
         video.src = src; 
@@ -259,10 +230,10 @@ function openLightbox(card) {
         wrapper.appendChild(img);
     }
 
-    // 3. CRÉATION DU BLOC TEXTE (TITRE + SOFTS + DATE)
     const infoDiv = document.createElement('div');
     infoDiv.style.textAlign = 'center';
     infoDiv.style.color = 'white';
+    infoDiv.style.marginTop = '15px';
     infoDiv.innerHTML = `
         <h2 style="margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;">${title}</h2>
         <p style="margin: 5px 0 0; color: #aaa; font-size: 0.9rem; font-style: italic;">${softs}</p>
@@ -272,13 +243,13 @@ function openLightbox(card) {
     wrapper.appendChild(infoDiv);
     lightboxContent.appendChild(wrapper);
 
-    // On efface l'ancien caption séparé s'il existe encore dans ton HTML
     if(lightboxCaption) lightboxCaption.innerText = ""; 
 
     lightbox.style.display = 'flex';
     gsap.to(lightbox, { opacity: 1, duration: 0.3 });
     lenis.stop();
 }
+
 function closeLightbox() {
     const activeVideo = lightboxContent.querySelector('video');
     if (activeVideo) { activeVideo.pause(); activeVideo.src = ""; }
@@ -287,7 +258,7 @@ function closeLightbox() {
 }
 lightboxContent.addEventListener('click', (e) => e.stopPropagation());
 
-// --- 4. FILTRAGE PROJETS ---
+// --- FILTRAGE PROJETS ---
 function filterProjects(category, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -305,56 +276,43 @@ function filterProjects(category, btn) {
     });
 }
 
-// --- OPTIMISATION VIDÉOS : Poster + Hover to Play ---
-// Les vidéos n'autoplay JAMAIS, elles se jouent seulement au hover
+// --- OPTIMISATION VIDÉOS (Hover to Play) ---
 document.addEventListener('DOMContentLoaded', () => {
     const projectVideos = document.querySelectorAll('.project-card video');
-    
     projectVideos.forEach(video => {
         const card = video.closest('.project-card');
-        
-        // Retirer autoplay de toutes les vidéos
         video.removeAttribute('autoplay');
-        video.setAttribute('preload', 'none'); // Ne charge rien par défaut
+        video.setAttribute('preload', 'none');
         
-        // Hover : Jouer la vidéo (en mode normal seulement)
         card.addEventListener('mouseenter', () => {
             if (window.videoAutoplayEnabled !== false) {
-                // Charger et jouer la vidéo
-                video.load(); // Force le chargement
+                video.load();
                 video.play().catch(() => {});
             }
         });
         
-        // Mouse leave : Vider la vidéo pour réafficher le poster
         card.addEventListener('mouseleave', () => {
             video.pause();
             video.currentTime = 0;
-            // IMPORTANT : Vider le src pour forcer le retour au poster
             video.removeAttribute('src');
-            video.load(); // Recharger pour afficher le poster
+            video.load();
         });
     });
-    
-    console.log(`✅ ${projectVideos.length} vidéos optimisées (hover-to-play)`);
 });
 
-// --- 5. ANIMATIONS DIVERSES ---
+// --- ANIMATIONS DIVERSES ---
 gsap.to(".soft-item", {
     scrollTrigger: { trigger: "#about", start: "top 70%", toggleActions: "play none none reverse" },
     y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power2.out"
 });
 
-// Animation des compétences
 document.addEventListener('DOMContentLoaded', function() {
     const skillCategories = document.querySelectorAll('.skill-category');
-    
     skillCategories.forEach((category, index) => {
         ScrollTrigger.create({
             trigger: category,
             start: "top 80%",
             onEnter: () => {
-                // Rendre visible avec animation
                 setTimeout(() => {
                     category.classList.add('visible');
                 }, 150 * index);
@@ -374,14 +332,9 @@ card.addEventListener('mousemove', (e) => {
 });
 card.addEventListener('mouseleave', () => { card.style.transform = `perspective(1000px) scale(1.05) rotateX(0) rotateY(0)`; });
 
-// --- 7. NAVIGATION FLOTTANTE ---
 const floatingNav = document.getElementById('floating-nav');
 window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const winH = window.innerHeight;
-
-    // Visible partout sauf sur la section Home
-    if (scrollY > winH * 0.8) {
+    if (window.scrollY > window.innerHeight * 0.8) {
         floatingNav.classList.add('visible');
     } else {
         floatingNav.classList.remove('visible');
@@ -389,7 +342,7 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================================
-// --- 8. THREE.JS : GALAXY ENGINE FINAL ---
+// --- THREE.JS : GALAXY ENGINE ---
 // =========================================================
 
 const scene = new THREE.Scene();
@@ -397,7 +350,7 @@ scene.fog = new THREE.FogExp2(0x000000, 0.0005);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 50;
-scene.add(camera); // IMPORTANT : Ajouter la caméra à la scène
+scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -407,13 +360,9 @@ document.getElementById('webgl-container').appendChild(renderer.domElement);
 const galaxyGroup = new THREE.Group();
 scene.add(galaxyGroup);
 
-// ===== CONFIGURATION DES VITESSES DE ROTATION =====
-// Ajuste ces valeurs pour contrôler la vitesse de rotation de la galaxie
-const GALAXY_ROTATION_SPEED = 0.0002;  // Vitesse de base (réduite de 0.0005 à 0.0002)
-const ROTATION_VARIATION = 0.2;        // Variation aléatoire (±20%)
-// ==================================================
+const GALAXY_ROTATION_SPEED = 0.0002;  
+const ROTATION_VARIATION = 0.2;        
 
-// --- PALETTES DE COULEURS ---
 const palettes = [
     { base: new THREE.Color(0x0a1a3a), mid: new THREE.Color(0x8a00ff), high: new THREE.Color(0x00d4ff), bg: new THREE.Color(0x050518) },
     { base: new THREE.Color(0x052010), mid: new THREE.Color(0x00ff6a), high: new THREE.Color(0xccff00), bg: new THREE.Color(0x020f05) },
@@ -434,14 +383,12 @@ const currentColors = {
     bg: palettes[currentPaletteIndex].bg.clone()
 };
 
-// --- TEXTURE NÉBULEUSE (Allongée et organique) ---
 function createNebulaTexture() {
     const canvas = document.createElement('canvas');
-    canvas.width = 512; // Plus grande résolution pour éviter la pixelisation
+    canvas.width = 512; 
     canvas.height = 256; 
     const ctx = canvas.getContext('2d');
     
-    // Créer un gradient allongé avec bords plus doux
     const grd = ctx.createRadialGradient(256, 128, 0, 256, 128, 220);
     grd.addColorStop(0, 'rgba(255,255,255,0.6)'); 
     grd.addColorStop(0.3, 'rgba(255,255,255,0.3)');
@@ -450,10 +397,9 @@ function createNebulaTexture() {
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, 512, 256);
     
-    // Ajouter du bruit subtil pour rendre les bords irréguliers
     const imageData = ctx.getImageData(0, 0, 512, 256);
     for(let i = 0; i < imageData.data.length; i += 4) {
-        const noise = Math.random() * 0.15; // Moins de bruit = bords plus doux
+        const noise = Math.random() * 0.15; 
         imageData.data[i + 3] *= (1 - noise);
     }
     ctx.putImageData(imageData, 0, 0);
@@ -464,8 +410,6 @@ function createNebulaTexture() {
 }
 const nebulaTexture = createNebulaTexture();
 
-// --- SYSTÈME D'ÉTOILES MULTI-COUCHES (Profondeur) ---
-// INVERSÉ : Plus d'étoiles loin, moins d'étoiles proches
 const starLayers = [];
 
 function createStarLayer(count, size, spread, speedMultiplier) {
@@ -477,8 +421,6 @@ function createStarLayer(count, size, spread, speedMultiplier) {
         pos[i * 3] = (Math.random() - 0.5) * spread;
         pos[i * 3 + 1] = (Math.random() - 0.5) * spread;
         pos[i * 3 + 2] = (Math.random() - 0.5) * spread;
-        
-        // Variation de taille pour chaque étoile
         sizes[i] = size * (0.5 + Math.random() * 1.5);
     }
     
@@ -496,31 +438,23 @@ function createStarLayer(count, size, spread, speedMultiplier) {
     const stars = new THREE.Points(geom, mat);
     galaxyGroup.add(stars);
     
-    return {
-        mesh: stars,
-        speedMultiplier: speedMultiplier
-    };
+    return { mesh: stars, speedMultiplier: speedMultiplier };
 }
 
-// INVERSÉ : Plus d'étoiles lointaines, moins d'étoiles proches
-// Ajustement selon le mode performance
-const starMultiplier = window.reducedStars ? 0.3 : 1; // 70% moins d'étoiles en mode léger
+const starMultiplier = window.reducedStars ? 0.3 : 1; 
 
-starLayers.push(createStarLayer(Math.floor(18000 * starMultiplier), 0.15, 800, 0.15));  // Lointaines
-starLayers.push(createStarLayer(Math.floor(4000 * starMultiplier), 0.35, 500, 0.35));   // Moyennes
-starLayers.push(createStarLayer(Math.floor(600 * starMultiplier), 0.6, 300, 0.6));      // Proches
+starLayers.push(createStarLayer(Math.floor(18000 * starMultiplier), 0.15, 800, 0.15));  
+starLayers.push(createStarLayer(Math.floor(4000 * starMultiplier), 0.35, 500, 0.35));   
+starLayers.push(createStarLayer(Math.floor(600 * starMultiplier), 0.6, 300, 0.6));      
 
-// --- NÉBULEUSES ALLONGÉES (Style Mario Galaxy) ---
-// Plus loin et plus grandes pour être bien visibles
 function createNebulaCloud(count, scaleX, scaleY, color, opacity, spread) {
     const geom = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
     
     for(let i = 0; i < count; i++) {
-        // Distribution allongée pour créer des formes de nuages
         const angle = Math.random() * Math.PI * 2;
         const radius = Math.random() * spread;
-        const elongation = 2 + Math.random(); // Facteur d'élongation
+        const elongation = 2 + Math.random(); 
         
         pos[i * 3] = Math.cos(angle) * radius * elongation;
         pos[i * 3 + 1] = (Math.random() - 0.5) * spread * 0.5;
@@ -544,23 +478,14 @@ function createNebulaCloud(count, scaleX, scaleY, color, opacity, spread) {
     return points;
 }
 
-// Nébuleuses plus grandes et plus visibles
 const nebulaBase = createNebulaCloud(25, 1200, 600, currentColors.base, 0.25, 250);
 const nebulaMid = createNebulaCloud(30, 900, 450, currentColors.mid, 0.18, 220);
 const nebulaHigh = createNebulaCloud(20, 700, 350, currentColors.high, 0.22, 180);
 
-// Rotation initiale aléatoire pour chaque nébuleuse
 nebulaBase.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
 nebulaMid.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
 nebulaHigh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
 
-
-
-// ==========================================
-// --- FORME 3D : IMPORT MODÈLE GLB ---
-// ==========================================
-
-// 1. LUMIÈRES (OBLIGATOIRES pour voir le modèle)
 const ambientLight = new THREE.AmbientLight(0xffffff, 1); 
 scene.add(ambientLight);
 
@@ -568,20 +493,13 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 3);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-// 2. GROUPE CONTENEUR (Pour le scroll)
 const modelGroup = new THREE.Group();
-scene.add(modelGroup); // Remettre dans la scène, pas dans la caméra
+scene.add(modelGroup); 
 modelGroup.position.set(20, 0, 10);
 
-// 3. CHARGEMENT DU MODÈLE (ALÉATOIRE)
 const loader = new THREE.GLTFLoader();
 
-// --- A. TA LISTE DE MODÈLES ---
-// Ajoute autant de modèles que tu veux ici.
-// "file" : le chemin vers ton fichier .glb
-// "scale" : la taille idéale (1 = normal, 0.5 = moitié, 2 = double)
 const modelList = [
-    // scale: Taille | yOffset: Décalage vertical (Haut/Bas)
     { file: 'models/mario64.glb',   scale: .2, yOffset: 4 },
     { file: 'models/nyoibo.glb',   scale: .3, yOffset: 2 },
     { file: 'models/gokukidhead.glb',   scale: .2, yOffset: 7 },
@@ -598,65 +516,41 @@ const modelList = [
     { file: 'models/bluecoin.glb',   scale: .3, yOffset: 0 },
 ];
 
-// --- B. TIRAGE AU SORT ---
 const randomIndex = Math.floor(Math.random() * modelList.length);
 const selectedModel = modelList[randomIndex];
 
-console.log("🎲 Modèle choisi : " + selectedModel.file);
-
-// --- C. CHARGEMENT ---
 loader.load(selectedModel.file, 
     function (gltf) {
         const model = gltf.scene;
-
-        // 1. ÉCHELLE
         const s = selectedModel.scale;
         model.scale.set(s, s, s); 
 
-        // 2. RECENTRAGE AUTOMATIQUE (Calcul mathématique)
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         model.position.sub(center); 
 
-        // 3. APPLICATION DE TON OFFSET MANUEL (La retouche finale)
-        // Si yOffset existe dans la liste, on l'applique, sinon on ajoute 0
         const verticalShift = selectedModel.yOffset || 0; 
         model.position.y += verticalShift;
 
-        // Optionnel : Activer les ombres sur le modèle
         model.traverse((node) => {
-            if (node.isMesh) {
-                // Si tu veux garder l'aspect "fil de fer" (Wireframe) sur ton modèle, décommente ça :
-                node.material.wireframe = true; 
-            }
+            if (node.isMesh) { node.material.wireframe = true; }
         });
 
         modelGroup.add(model);
         window.mainMesh = model;
-        
-        // Notifier le loader que le modèle est chargé
-        console.log("✅ Modèle 3D chargé !");
         if (window.loaderModelLoaded) window.loaderModelLoaded();
     },
     undefined,
     function (error) {
-        console.error('❌ Erreur sur le modèle ' + selectedModel.file + ' :', error);
-        // Même en cas d'erreur, on débloquer le loader
+        console.error('❌ Erreur modèle :', error);
         if (window.loaderModelLoaded) window.loaderModelLoaded();
     }
 );
 
-
-// ==========================================
-// --- ANIMATION LOOP (CELLE QUI MANQUAIT) ---
-// ==========================================
-
 function animate() {
     requestAnimationFrame(animate);
+    const time = Date.now() * 0.0001; 
     
-    const time = Date.now() * 0.0001; // Timer pour les mouvements fluides
-    
-    // 1. GESTION DES COULEURS (ON GARDE TON SYSTÈME)
     transitionProgress += transitionSpeed;
     if(transitionProgress >= 1) {
         transitionProgress = 0;
@@ -676,50 +570,30 @@ function animate() {
     nebulaMid.material.color.copy(currentColors.mid);
     nebulaHigh.material.color.copy(currentColors.high);
     
-    // Mise à jour du fond
     scene.fog.color.copy(currentColors.bg);
     document.body.style.backgroundColor = `#${currentColors.bg.getHexString()}`;
 
-    // 2. ROTATION DE LA GALAXIE (au lieu de la caméra)
-    // Rotations ÉGALES sur les 3 axes pour une vraie dérive spatiale
-    // Ajuste GALAXY_ROTATION_SPEED en haut du script pour changer la vitesse
-    
     galaxyGroup.rotation.x += GALAXY_ROTATION_SPEED * (1 + Math.sin(time * 0.3) * ROTATION_VARIATION);
     galaxyGroup.rotation.y += GALAXY_ROTATION_SPEED * (1 + Math.cos(time * 0.4) * ROTATION_VARIATION);
     galaxyGroup.rotation.z += GALAXY_ROTATION_SPEED * (1 + Math.sin(time * 0.5) * ROTATION_VARIATION);
     
-    // 3. LÉGÈRE ROTATION DES NÉBULEUSES (pour plus de vie)
-    nebulaBase.rotation.x += 0.00002;
-    nebulaBase.rotation.y += 0.00005;
-    nebulaBase.rotation.z += 0.00003;
-    
-    nebulaMid.rotation.x -= 0.00003;
-    nebulaMid.rotation.y += 0.00007;
-    nebulaMid.rotation.z -= 0.00002;
-    
-    nebulaHigh.rotation.x += 0.00004;
-    nebulaHigh.rotation.y -= 0.00006;
-    nebulaHigh.rotation.z += 0.00002;
+    nebulaBase.rotation.x += 0.00002; nebulaBase.rotation.y += 0.00005;
+    nebulaMid.rotation.x -= 0.00003;  nebulaMid.rotation.y += 0.00007;
+    nebulaHigh.rotation.x += 0.00004; nebulaHigh.rotation.y -= 0.00006;
 
-    // 4. PARALLAXE SUBTILE DES COUCHES D'ÉTOILES
     starLayers.forEach((layer, index) => {
         layer.mesh.rotation.y += 0.00003 * layer.speedMultiplier;
         layer.mesh.rotation.x += 0.00001 * layer.speedMultiplier * Math.sin(time + index);
     });
 
-    // 5. ANIMATION DU MODÈLE 3D (Si chargé)
     if(window.mainMesh) {
-        // Rotation sur les 3 axes
-        window.mainMesh.rotation.y += 0.001; // Rotation principale (toupie)
-        window.mainMesh.rotation.x += 0.002; // Légère bascule avant/arrière
-        window.mainMesh.rotation.z += 0.003; // Léger roulis sur le côté
+        window.mainMesh.rotation.y += 0.001;
+        window.mainMesh.rotation.x += 0.002;
+        window.mainMesh.rotation.z += 0.003;
     }
-    
     renderer.render(scene, camera);
 }
-// Lancement de l'animation
 animate();
-
 
 window.addEventListener('resize', () => { 
     camera.aspect = window.innerWidth / window.innerHeight; 
@@ -727,12 +601,7 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight); 
 });
 
-
-// =========================================================
-// --- 9. MUSIC PLAYER (SHUFFLE & AUTO-HIDE) ---
-// =========================================================
-
-// --- A. CONFIGURATION ---
+// --- MUSIC PLAYER ---
 const playlist = [
     { title: "Comet Observatory - Super Mario Galaxy", src: "musics/rosalina_observatory.mp3" },
     { title: "Title Screen - Super Mario Galaxy", src: "musics/smg-titlescreen.mp3" },
@@ -750,24 +619,19 @@ let currentTrackIndex = 0;
 let isPlaying = false;
 let audio = new Audio();
 
-// Éléments DOM
 const playerExpanded = document.getElementById('music-player-expanded');
 const btnMinimized = document.getElementById('music-btn-minimized');
 const trackName = document.getElementById('track-name');
 const playBtn = document.querySelector('.main-play');
 const volumeSlider = document.getElementById('volume-slider');
 
-// --- B. LOGIQUE ALÉATOIRE INTELLIGENTE ---
 function getRandomTrackIndex(currentIndex) {
     if (playlist.length <= 1) return 0;
     let newIndex;
-    do {
-        newIndex = Math.floor(Math.random() * playlist.length);
-    } while (newIndex === currentIndex); 
+    do { newIndex = Math.floor(Math.random() * playlist.length); } while (newIndex === currentIndex); 
     return newIndex;
 }
 
-// --- C. LOGIQUE AUDIO ---
 function loadTrack(index) {
     audio.src = playlist[index].src;
     trackName.innerText = playlist[index].title;
@@ -782,175 +646,96 @@ function playRandomTrack() {
 }
 
 function togglePlay() {
-    if (isPlaying) {
-        audio.pause();
-        playBtn.innerText = "▶";
-    } else {
-        audio.play();
-        playBtn.innerText = "⏸";
-    }
+    if (isPlaying) { audio.pause(); playBtn.innerText = "▶"; } else { audio.play(); playBtn.innerText = "⏸"; }
     isPlaying = !isPlaying;
     resetInactivityTimer();
 }
 
-function nextTrack() {
-    playRandomTrack();
-    if(!isPlaying) { isPlaying = true; audio.play(); playBtn.innerText = "⏸"; }
-}
+function nextTrack() { playRandomTrack(); if(!isPlaying) { isPlaying = true; audio.play(); playBtn.innerText = "⏸"; } }
+function prevTrack() { playRandomTrack(); if(!isPlaying) { isPlaying = true; audio.play(); playBtn.innerText = "⏸"; } }
+function setVolume(val) { audio.volume = val; resetInactivityTimer(); }
 
-function prevTrack() {
-    playRandomTrack();
-    if(!isPlaying) { isPlaying = true; audio.play(); playBtn.innerText = "⏸"; }
-}
-
-function setVolume(val) {
-    audio.volume = val;
-    resetInactivityTimer();
-}
-
-// AUTO-SHUFFLE
 audio.addEventListener('ended', nextTrack);
 
-
-// --- D. SYSTÈME AUTO-HIDE ---
 let inactivityTimer;
 const HIDE_DELAY = 4000; 
 
-function showPlayer() {
-    playerExpanded.classList.remove('hidden');
-    btnMinimized.classList.remove('active');
-    resetInactivityTimer();
-}
+function showPlayer() { playerExpanded.classList.remove('hidden'); btnMinimized.classList.remove('active'); resetInactivityTimer(); }
+function hidePlayer() { playerExpanded.classList.add('hidden'); btnMinimized.classList.add('active'); }
+function resetInactivityTimer() { clearTimeout(inactivityTimer); inactivityTimer = setTimeout(hidePlayer, HIDE_DELAY); }
+function togglePlayer(forceShow) { if(forceShow) showPlayer(); }
 
-function hidePlayer() {
-    playerExpanded.classList.add('hidden');
-    btnMinimized.classList.add('active');
-}
-
-function resetInactivityTimer() {
-    clearTimeout(inactivityTimer);
-    inactivityTimer = setTimeout(hidePlayer, HIDE_DELAY);
-}
-
-function togglePlayer(forceShow) {
-    if(forceShow) showPlayer();
-}
-
-// --- INITIALISATION ---
 currentTrackIndex = getRandomTrackIndex(-1); 
 loadTrack(currentTrackIndex);
 audio.volume = volumeSlider.value;
 resetInactivityTimer();
 
-// --- E. INTERACTION SOURIS ---
 playerExpanded.addEventListener('mouseenter', () => clearTimeout(inactivityTimer));
 playerExpanded.addEventListener('mouseleave', () => resetInactivityTimer());
 
-
-// =========================================================
-// --- 10. SCROLL ANIMATION avec ScrollTrigger ---
-// =========================================================
-// On attend que tout soit bien chargé avant de créer les triggers
-
-console.log("🎯 Création des ScrollTriggers...");
-
-// Position HOME (Section #home)
+// --- SCROLL ANIMATIONS ---
 ScrollTrigger.create({
-    trigger: "#home",
-    start: "top center",
-    end: "bottom center",
-    onEnter: () => {
-        console.log("🏠 Entrée dans HOME");
-        gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    },
-    onEnterBack: () => {
-        console.log("🏠 Retour dans HOME");
-        gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    }
+    trigger: "#home", start: "top center", end: "bottom center",
+    onEnter: () => { gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 }); },
+    onEnterBack: () => { gsap.to(modelGroup.position, { x: 20, y: 0, z: 10, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 }); }
 });
 
-// Position PROJECTS (Section #projects)
 ScrollTrigger.create({
-    trigger: "#projects",
-    start: "top center",
-    end: "bottom center",
-    onEnter: () => {
-        console.log("💼 Entrée dans PROJECTS");
-        gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    },
-    onEnterBack: () => {
-        console.log("💼 Retour dans PROJECTS");
-        gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    }
+    trigger: "#projects", start: "top center", end: "bottom center",
+    onEnter: () => { gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 }); },
+    onEnterBack: () => { gsap.to(modelGroup.position, { x: -25, y: 0, z: 5, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 }); }
 });
 
-// Position ABOUT (Section #about)
 ScrollTrigger.create({
-    trigger: "#about",
-    start: "top center",
-    end: "bottom center",
-    onEnter: () => {
-        console.log("👤 Entrée dans ABOUT");
-        gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    },
-    onEnterBack: () => {
-        console.log("👤 Retour dans ABOUT");
-        gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 });
-    }
+    trigger: "#about", start: "top center", end: "bottom center",
+    onEnter: () => { gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 }); },
+    onEnterBack: () => { gsap.to(modelGroup.position, { x: 25, y: -5, z: 5, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5 }); }
 });
 
-// Position SKILLS (Section #skills)
 ScrollTrigger.create({
-    trigger: "#skills",
-    start: "top center",
-    end: "bottom center",
-    onEnter: () => {
-        console.log("⚡ Entrée dans SKILLS");
-        gsap.to(modelGroup.position, { x: 20, y: 5, z: 8, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5 });
-    },
-    onEnterBack: () => {
-        console.log("⚡ Retour dans SKILLS");
-        gsap.to(modelGroup.position, { x: 20, y: 5, z: 8, duration: 1.5, ease: "power2.out" });
-        gsap.to(modelGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5 });
-    }
+    trigger: "#skills", start: "top center", end: "bottom center",
+    onEnter: () => { gsap.to(modelGroup.position, { x: 20, y: 5, z: 8, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5 }); },
+    onEnterBack: () => { gsap.to(modelGroup.position, { x: 20, y: 5, z: 8, duration: 1.5, ease: "power2.out" }); gsap.to(modelGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5 }); }
 });
 
-// Position CONTACT (Section #contact)
 ScrollTrigger.create({
-    trigger: "#contact",
-    start: "top center",
-    end: "bottom center",
-    onEnter: () => {
-        console.log("📧 Entrée dans CONTACT");
-        gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" });
-        gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 });
-    },
-    onEnterBack: () => {
-        console.log("📧 Retour dans CONTACT");
-        gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" });
-        gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 });
-    }
+    trigger: "#contact", start: "top center", end: "bottom center",
+    onEnter: () => { gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" }); gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 }); },
+    onEnterBack: () => { gsap.to(modelGroup.position, { x: 0, y: 0, z: 15, duration: 1.5, ease: "back.out(1.7)" }); gsap.to(modelGroup.scale, { x: 2, y: 2, z: 2, duration: 1.5 }); }
 });
 
- // On définit les morceaux de l'adresse
- var user = "naim.nshou";      // La partie avant le @
- var domain = "gmail.com";  // La partie après le @
- 
- // On récupère l'élément par son ID
- var mailLink = document.getElementById('email-me');
- 
- // On construit l'adresse complète
- var fullEmail = user + "@" + domain;
- 
- // On injecte l'adresse dans le href et le texte du lien
- mailLink.href = "mailto:" + fullEmail;
- mailLink.innerHTML = fullEmail;
+var user = "naim.nshou";      
+var domain = "gmail.com";  
+var mailLink = document.getElementById('email-me');
+var fullEmail = user + "@" + domain;
+mailLink.href = "mailto:" + fullEmail;
+mailLink.innerHTML = fullEmail;
 
 console.log("✅ ScrollTriggers créés avec succès !");
+
+// =========================================================
+// --- FIX BUG SCROLL IFRAME (Demo Reel) ---
+// =========================================================
+const demoOverlay = document.querySelector('.demoreel-overlay');
+const demoIframe = document.querySelector('.demoreel-container iframe');
+const demoContainer = document.querySelector('.demoreel-container');
+
+if (demoOverlay && demoIframe) {
+    // Quand on clique, on casse la vitre et on active la vidéo
+    demoOverlay.addEventListener('click', () => {
+        demoIframe.style.pointerEvents = 'auto';
+        demoOverlay.style.display = 'none';
+        
+        // Optionnel : Forcer la lecture automatique au 1er clic
+        let src = demoIframe.src;
+        if (!src.includes('autoplay=1')) {
+            demoIframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+        }
+    });
+
+    // Dès que la souris sort du cadre, la vitre revient pour protéger le scroll
+    demoContainer.addEventListener('mouseleave', () => {
+        demoIframe.style.pointerEvents = 'none';
+        demoOverlay.style.display = 'block';
+    });
+}
